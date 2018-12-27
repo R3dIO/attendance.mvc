@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Login extends CI_Controller {
 
 	/**
@@ -18,9 +17,39 @@ class Login extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function __construct() {
+	parent::__construct();
+	// Load form validation library
+	$this->load->library('form_validation');
+	// Load database
+	$this->load->model('login_model');
+	}
 	public function index()
 	{
 		$this->load->view('index');
 		$this->load->view('footer');
+	}
+
+	public function verify()
+	{
+		$data = array(
+		'username' => $this->input->post('username'),
+		'password' => $this->input->post('password')
+		);
+		$result=$this->login_model->login($data);
+		
+		if( is_numeric( $result[0]->id ) ){
+			$data = array('id' => $result[0]->id);
+			$this->session->set_userdata('username', $result[0]->username);
+			$this->session->set_userdata('userid', $result[0]->id);
+			$this->session->set_userdata('password', $result[0]->pass);
+			$result=$this->login_model->sessionData($data);
+			$this->session->set_userdata('user', $result[0]->name);
+			$this->load->view('teachers');
+		}
+		else{
+			$this->index();
+		}
 	}
 }
