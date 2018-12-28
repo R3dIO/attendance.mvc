@@ -32,33 +32,23 @@ class Login extends CI_Controller {
 		$this->load->view('footer');
 	}
 
-	public function onlineiet()
-	{	
-		$data = array( 'domain_name' => 'onlineiet',
-			'username' => $this->session->userdata('username'),
-			'password' => $this->session->userdata('password'),
-		 );
-		$this->load->view('header',$data);
-		$this->load->view('teachers',$data);
-		$this->load->view('footer');
-	}
-
 	public function verify()
 	{
 		$data = array(
 		'username' => $this->input->post('username'),
 		'password' => $this->input->post('password')
 		);
-		$result=$this->login_model->login($data);
-
+		$result = $this->login_model->login($data); //print_r($result);
+		
 		if( is_array($result) ){
 			$data = array('id' => $result[0]->id);
 			$this->session->set_userdata('username', $result[0]->username);
 			$this->session->set_userdata('userid', $result[0]->id);
 			$this->session->set_userdata('password', $result[0]->pass);
+			
 			$result=$this->login_model->sessionData($data);
 			$this->session->set_userdata('user', $result[0]->name);
-			$this->onlineiet();
+			redirect('domain_selector');
 		}
 		else{
 			$this->index();

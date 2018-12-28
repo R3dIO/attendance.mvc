@@ -23,7 +23,7 @@
             <div class="col-1"></div>
 
   <div class="col-md-2 col-xs-12 col-sm-12">    
-    <a class="icon-wrapper" href="attendance.php"><i class="fa fa-calendar-check-o fa-4x custom-icon"><span class="fix-editor">&nbsp;</span></i></a>
+    <a class="icon-wrapper" href="class_selector"><i class="fa fa-calendar-check-o fa-4x custom-icon"><span class="fix-editor">&nbsp;</span></i></a>
     <a href="attendance.php"><h3>Attendance</h3></a> 
   </div>
 

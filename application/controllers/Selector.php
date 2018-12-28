@@ -20,34 +20,57 @@ class Selector extends CI_Controller {
 
 	public function __construct() {
 	parent::__construct();
+	$this->load->model('classes_model');
 	}
-	
+
 	public function index()
 	{	
-		$this->load->view('header');
-		$this->load->view('teachers');
+		$data = array( 'domain_name' => 'Teachers Panel',
+			'username' => $this->session->userdata('username'),
+			'password' => $this->session->userdata('password'),
+		 );
+		$this->load->view('header',$data);
+		$this->load->view('teachersPanel',$data);
 		$this->load->view('footer');
 	}
 
-	public function verify()
-	{
-		$data = array(
-		'username' => $this->input->post('username'),
-		'password' => $this->input->post('password')
-		);
-		$result=$this->login_model->login($data);
+	public function retrieveClasses()
+	{	
+		$userid = $this->session->userdata('userid');
+		$result_th = $this->classes_model->thClassList($userid);
+		$result_lb = $this->classes_model->lbClassList($userid);
+		$coordinator = $this->classes_model->classCoordinator($userid); 
+		
+		$branch_list_th = '';		$subject_list_th = '';		$subject_code_th = '';
+		$branch_list_lb = '';		$subject_list_lb = '';		$subject_code_lb = '';
 
-		if( is_array($result) ){
-			$data = array('id' => $result[0]->id);
-			$this->session->set_userdata('username', $result[0]->username);
-			$this->session->set_userdata('userid', $result[0]->id);
-			$this->session->set_userdata('password', $result[0]->pass);
-			$result=$this->login_model->sessionData($data);
-			$this->session->set_userdata('user', $result[0]->name);
-			$this->load->view('teachers');
+		foreach ($result_th as $key => $value) {
+			$branch_list_th.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
+         	$subject_list_th.='<option value='.$value->id1.'>'.$value->subject_code." ".$value->subject_name.'</option>';
+          	$subject_code_th.='<option value='.$value->id.'>'.$value->id1.'</option>';
+
 		}
-		else{
-			$this->index();
+
+		foreach ($result_lb as $key => $value) {
+			$branch_list_lb.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
+         	$subject_list_lb.='<option value='.$value->id1.'>'.$value->subject_code." ".$value->subject_name.'</option>';
+          	$subject_code_lb.='<option value='.$value->id.'>'.$value->id1.'</option>';
+
 		}
+
+		$data = array('branchListTH' => $branch_list_th,
+			'subjectListTH' => $subject_list_th,
+			'subjectCodeTH' => $subject_code_th,
+			'branchListLB'  => $branch_list_lb,
+			'subjectListLB' => $subject_list_lb,
+			'subjectCodeLB' => $subject_code_lb,
+			'coordinator'	=> $coordinator 	
+		);
+		$dataHead = array( 'domain_name' => 'Attendance System',);
+		
+		$this->load->view('header',$dataHead);
+		$this->load->view('classes',$data);
+		$this->load->view('footer');
+		
 	}
 }
