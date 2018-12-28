@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class Login extends CI_Controller {
+class Selector extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -20,26 +20,12 @@ class Login extends CI_Controller {
 
 	public function __construct() {
 	parent::__construct();
-	// Load form validation library
-	$this->load->library('form_validation');
-	// Load database
-	$this->load->model('login_model');
-
 	}
+	
 	public function index()
-	{
-		$this->load->view('index');
-		$this->load->view('footer');
-	}
-
-	public function onlineiet()
 	{	
-		$data = array( 'domain_name' => 'onlineiet',
-			'username' => $this->session->userdata('username'),
-			'password' => $this->session->userdata('password'),
-		 );
-		$this->load->view('header',$data);
-		$this->load->view('teachers',$data);
+		$this->load->view('header');
+		$this->load->view('teachers');
 		$this->load->view('footer');
 	}
 
@@ -58,7 +44,7 @@ class Login extends CI_Controller {
 			$this->session->set_userdata('password', $result[0]->pass);
 			$result=$this->login_model->sessionData($data);
 			$this->session->set_userdata('user', $result[0]->name);
-			$this->onlineiet();
+			$this->load->view('teachers');
 		}
 		else{
 			$this->index();
