@@ -38,8 +38,8 @@ class Login extends CI_Controller {
 		'password' => $this->input->post('password')
 		);
 		$result=$this->login_model->login($data);
-		
-		if( is_numeric( $result[0]->id ) ){
+
+		if( is_array($result) ){
 			$data = array('id' => $result[0]->id);
 			$this->session->set_userdata('username', $result[0]->username);
 			$this->session->set_userdata('userid', $result[0]->id);

@@ -11,7 +11,7 @@ $this->db->limit(1);
 $query = $this->db->get('faculty_login_table');
 
 	if ($query->num_rows() == 1) 
-	{ return $query->result();} 
+	{ return $query->result(); } 
 	else 
 	{ return false; }
 }
