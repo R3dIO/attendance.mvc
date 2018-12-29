@@ -44,6 +44,7 @@ class Selector extends CI_Controller {
 		$branch_list_th = '';		$subject_list_th = '';		$subject_code_th = '';
 		$branch_list_lb = '';		$subject_list_lb = '';		$subject_code_lb = '';
 
+		if($result_th != null)
 		foreach ($result_th as $key => $value) {
 			$branch_list_th.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
          	$subject_list_th.='<option value='.$value->id1.'>'.$value->subject_code." ".$value->subject_name.'</option>';
@@ -51,6 +52,7 @@ class Selector extends CI_Controller {
 
 		}
 
+		if($result_lb != null)
 		foreach ($result_lb as $key => $value) {
 			$branch_list_lb.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
          	$subject_list_lb.='<option value='.$value->id1.'>'.$value->subject_code." ".$value->subject_name.'</option>';
@@ -67,7 +69,7 @@ class Selector extends CI_Controller {
 			'coordinator'	=> $coordinator 	
 		);
 		$dataHead = array( 'domain_name' => 'Attendance System',);
-		
+
 		$this->load->view('header',$dataHead);
 		$this->load->view('classes',$data);
 		$this->load->view('footer');

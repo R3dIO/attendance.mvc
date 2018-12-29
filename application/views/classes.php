@@ -16,9 +16,9 @@ function SetSubTh() {
   var subject=document.getElementById("subjectdetailth");
   var hidden_sub=document.getElementById("hidden_subth");
   var hidden=document.getElementById("hiddenth");
-
+  //console.log(subject + hidden_sub + hidden);
   while(subject.options.length)
-     subject.remove(0);
+    	subject.remove(0);
 
   for(i=0;i<hidden.options.length;i++) {
     if(hidden.options[i].value == document.selectclass.classdetail.value) {
@@ -44,7 +44,7 @@ function SetSubLb() {
   var hidden=document.getElementById("hiddenlb");
   
   while(subject.options.length)
-     subject.remove(0);
+     	subject.remove(0);
   
   for(i=0;i<hidden.options.length;i++) {
     if(hidden.options[i].value == document.selectlab.classdetail.value) {

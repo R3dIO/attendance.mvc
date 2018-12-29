@@ -44,7 +44,7 @@
       <div class=" col-md-3 col-xs-12"></div>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <div class="col-md-3 "> <a class="nav-link" href="index.php" style="color: aliceblue">Home<span class="sr-only">(current)</span></a></div>
+          <div class="col-md-3 "> <a class="nav-link" href="<?php echo base_url(); ?>index.php" style="color: aliceblue">Home<span class="sr-only">(current)</span></a></div>
         </li>
         <li class="nav-item">
            <div class="col-md-3 "> <a class="nav-link" href="about.php" style="color: aliceblue">About</a></div>
