@@ -1,6 +1,6 @@
 <?php
 
-Class login_model extends CI_Model {
+Class Login_model extends CI_Model {
 
 // Read data using username and password
 public function login($data) {

@@ -1,6 +1,6 @@
 <?php
 
-Class classes_model extends CI_Model {
+Class Classes_model extends CI_Model {
 
 public function classCoordinator($data){
 	$this->db->select('*');
@@ -44,6 +44,23 @@ public function lbClassList($data) {
 			{ return $query->result(); } 
 		else 
 			{ return false; }
+}
+
+public function fetchFacultySubjects($faculty_id,$class_id) {
+	$this->db->select('subject_id');
+	$this->db->from('faculty_subject_table');
+	$this->db->where('class_id =', $class_id);
+	$this->db->where('faculty_id =', $faculty_id);	
+	$query = $this->db->get();
+	return $query->result();
+}
+
+public function fetchSubject($id,$type) {
+	if($type == 'theory')
+		$query = $this->db->query("SELECT subject_code,subject_name from subject_table where id='$id' and (type=0 or type=2)");
+	else if($type == 'lab')
+		$query = $this->db->query("SELECT subject_code,subject_name from subject_table where id='$id' and (type=1 or type=2)");
+	return $query->result();
 }
 
 }

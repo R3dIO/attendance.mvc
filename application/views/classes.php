@@ -122,7 +122,7 @@ function SetSubLb() {
 		    <div class="col-md-8">
 		        <div class="row">
 
-					    <select class="form-control" id="classdetailth" name="classdetail" onChange="SetSubTh(this)">
+					    <select class="form-control" id="classdetailth" name="classdetail" onChange="loadSubjects('<?php echo base_url(); ?>', <?php echo $id; ?>,'theory')">
 					    	<option>Select Class</option>
 					   		<?php echo $branchListTH;?>
 					    </select>

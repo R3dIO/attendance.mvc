@@ -51,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'login';
 $route['domain_selector'] = 'selector';
+$route['get_subjects'] = 'selector/getSubjects';
 $route['class_selector'] = 'selector/retrieveClasses';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

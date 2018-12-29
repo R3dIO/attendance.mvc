@@ -15,6 +15,7 @@
 <link href="<?php echo base_url(); ?>css/font-awesome.css" rel="stylesheet" type="text/css">
 <script src="<?php echo base_url(); ?>js/jquery-3.3.1.min.js"></script>
 <script src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>js/common.js"></script>
 </head>
 
 <style type="text/css">

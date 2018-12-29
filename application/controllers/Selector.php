@@ -25,7 +25,7 @@ class Selector extends CI_Controller {
 
 	public function index()
 	{	
-		$data = array( 'domain_name' => 'Teachers Panel',
+		$data = array( 'domain_name' => 'Faculty Panel',
 			'username' => $this->session->userdata('username'),
 			'password' => $this->session->userdata('password'),
 		 );
@@ -66,7 +66,8 @@ class Selector extends CI_Controller {
 			'branchListLB'  => $branch_list_lb,
 			'subjectListLB' => $subject_list_lb,
 			'subjectCodeLB' => $subject_code_lb,
-			'coordinator'	=> $coordinator 	
+			'coordinator'	=> $coordinator,
+			'id' => $userid 	
 		);
 		$dataHead = array( 'domain_name' => 'Attendance System',);
 
@@ -74,5 +75,16 @@ class Selector extends CI_Controller {
 		$this->load->view('classes',$data);
 		$this->load->view('footer');
 		
+	}
+
+	public function getSubjects() {
+		$result = $this->classes_model->fetchFacultySubjects($_POST['faculty_id'],$_POST['class_id']);
+		foreach ($result as $key => $value) {
+			$subject = $this->classes_model->fetchSubject($value->subject_id,$_POST['type']);
+			foreach($subject as $k=>$v) {
+				$array[$v->subject_code] = $v->subject_name;
+			}
+		}
+		echo json_encode($array);
 	}
 }
