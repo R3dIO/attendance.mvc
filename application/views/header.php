@@ -45,13 +45,13 @@
       <div class=" col-md-3 col-xs-12"></div>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <div class="col-md-3 "> <a class="nav-link" href="<?php echo base_url(); ?>index.php" style="color: aliceblue">Home<span class="sr-only">(current)</span></a></div>
+          <div class="col-md-3 "> <a class="nav-link" href="<?php echo base_url(); ?>" style="color: aliceblue">Home<span class="sr-only">(current)</span></a></div>
         </li>
         <li class="nav-item">
-           <div class="col-md-3 "> <a class="nav-link" href="about.php" style="color: aliceblue">About</a></div>
+           <div class="col-md-3 "> <a class="nav-link" href="<?php echo site_url().'/about'; ?>" style="color: aliceblue">About</a></div>
         </li>
         <li class="nav-item">
-          <div class="col-md-3 ">  <a class="nav-link" href="logout.php" style="color: aliceblue">Logout</a></div>
+          <div class="col-md-3 ">  <a class="nav-link" href="<?php echo site_url().'/logout'; ?>" style="color: aliceblue">Logout</a></div>
         </li>
         <li class="nav-item">
           <div class="col-md-3 ">  <input  class="btn btn-primary" type="button" value="Back" onclick="window.history.back()" /></div>

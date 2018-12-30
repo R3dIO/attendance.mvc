@@ -5,7 +5,7 @@
      h3{color: #042c4f}
   </style>
   <title>
-    Teachers panel
+    Faculty panel
   </title>
 </head>
 <body>
@@ -17,7 +17,7 @@
   <div class="col-sm-12 col-md-12">
     <div class="card card-inverse card-info mb-3" style="margin-bottom:70px; margin-top:90px;background-color: #7abd7a">
       <div class="card-block">
-        <h3 class="card-title"><h3 class="text-primary"><?php echo "Welcome ".$username; /*display username welcome message*/ ?></h3></h3>  
+        <h3 class="card-title"><h3 class="text-primary"><?php echo "Welcome ".$user; /*display username welcome message*/ ?></h3></h3>  
         <div class="icon">
           <div class="row">
             <div class="col-1"></div>

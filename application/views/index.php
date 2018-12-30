@@ -4,71 +4,6 @@
 <head>
 <meta charset="utf-8">
 <title>HOME</title>
-
-<script type="text/javascript">
-
-  function checkForm(form)
-  {
-    if(form.username.value == "") {
-
-      alert("Error: Username cannot be blank!");
-
-      form.username.focus();
-
-      return false;
-    }
-    re = /^\w+$/;
-
-    if(!re.test(form.username.value)) {
-      alert("Error: Username must contain only letters, numbers and underscores!");
-      form.username.focus();
-      return false;
-    }
-
-    if(form.password.value != "" && form.password.value ) {
-      if(form.password.value.length < 6) {
-        alert("Error: Password must contain at least six characters!");
-        form.password.focus();
-        return false;
-      }
-
-      if(form.password.value == form.username.value) {
-
-        alert("Error: Password must be different from Username!");
-
-        form.password.focus();
-
-        return false;
-
-      }
-
-      re = /[a-z]/;
-
-      if(!re.test(form.password.value)) {
-
-        alert("Error: password must contain at least one lowercase letter (a-z)!");
-
-        form.password.focus();
-
-        return false;
-
-      }
-
-    } else {
-
-      alert("Error: Please check that you've entered and confirmed your password!");
-
-      form.password.focus();
-
-      return false;
-
-    }
-
-    return true;
-
-  }
-
-</script>
 <body>
 <center>
 <!doctype html>
@@ -89,6 +24,7 @@
 	<link href="<?php echo base_url(); ?>.css/font-awesome.css" rel="stylesheet" type="text/css">
 	<script src="<?php echo base_url(); ?>js/jquery-3.3.1.min.js"></script>
 	<script src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url(); ?>js/common.js"></script>
 
 	<style type="text/css">
 	  @media screen and (min-width: 768px){
@@ -114,7 +50,7 @@
 	  	<div class="col-md-5"></div>
 		    <ul class="navbar-nav mr-auto">
 		      <li class="nav-item">
-		       <div class="col-md-2"> <a class="nav-link" href="about.php" style="color: aliceblue">About</a></div>
+		       <div class="col-md-2"> <a class="nav-link" href="<?php echo site_url().'/about'; ?>" style="color: aliceblue">About</a></div>
 		      </li>
 		    </ul>
 	    </div>
@@ -125,6 +61,7 @@
 	<div class="login" style="vertical-align: middle;padding-top: 50px;padding-bottom: 20px">
 			<div class="col-md-4" >
 				<div class="panel panel-login">
+					<h6 id="error_msg"></h6>
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col rounded">
@@ -137,20 +74,18 @@
 					<div class="panel-body">
 						<div class="row">
 						    <div class="col-md-12">
-							<form id="login-form" action="<?php echo site_url('login/verify'); ?>" method="post" role="form" style="display: block;" onsubmit="return checkForm(this);">
-								
 								<div class="form-group">
-								     <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+								     <input type="text" class="form-control" id="username" placeholder="Username">
 								</div>
 
 								<div class="form-group">
-								      <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+								      <input type="password" class="form-control" id="password" placeholder="Password">
 								</div>
 
 								<div class="form-group">
 								    <div class="row">
 										<div class="col-md-6 mx-auto">
-									        <button type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login btn-primary" value="Log In">	Log In
+									        <button id="login-submit" tabindex="4" class="form-control btn btn-login btn-primary" onclick="login_faculty('<?php echo base_url(); ?>')">	Log In
 									        </button>
 										</div>
 									</div>
@@ -168,11 +103,10 @@
 										</div>
 									</div>
 
-								</form>
 								</div>
 						</div>
 					</div>
-
+					</form>
 				</div>
 			</div>
 	</div>

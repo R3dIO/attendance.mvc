@@ -25,54 +25,53 @@ class Selector extends CI_Controller {
 
 	public function index()
 	{	
-		$data = array( 'domain_name' => 'Faculty Panel',
-			'username' => $this->session->userdata('username'),
-			'password' => $this->session->userdata('password'),
-		 );
-		$this->load->view('header',$data);
-		$this->load->view('teachersPanel',$data);
+		if($this->session->userdata('userid')) {
+			$data = array( 'domain_name' => 'Faculty Panel',
+				'username' => $this->session->userdata('username'),
+				'password' => $this->session->userdata('password'),
+				'user' => $this->session->userdata('user'),
+		 	);
+			$this->load->view('header',$data);
+			$this->load->view('teachersPanel',$data);
+		} else
+			$this->load->view('index');
 		$this->load->view('footer');
 	}
 
 	public function retrieveClasses()
 	{	
 		$userid = $this->session->userdata('userid');
-		$result_th = $this->classes_model->thClassList($userid);
-		$result_lb = $this->classes_model->lbClassList($userid);
-		$coordinator = $this->classes_model->classCoordinator($userid); 
-		
-		$branch_list_th = '';		$subject_list_th = '';		$subject_code_th = '';
-		$branch_list_lb = '';		$subject_list_lb = '';		$subject_code_lb = '';
+		if (!$userid) 
+			$this->load->view('index');
+		else {
+			$result_th = $this->classes_model->thClassList($userid);
+			$result_lb = $this->classes_model->lbClassList($userid);
+			$coordinator = $this->classes_model->classCoordinator($userid); 
+			
+			$branch_list_th = '';
+			$branch_list_lb = '';
 
-		if($result_th != null)
-		foreach ($result_th as $key => $value) {
-			$branch_list_th.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
-         	$subject_list_th.='<option value='.$value->id1.'>'.$value->subject_code." ".$value->subject_name.'</option>';
-          	$subject_code_th.='<option value='.$value->id.'>'.$value->id1.'</option>';
+			if($result_th != null)
+			foreach ($result_th as $key => $value) {
+				$branch_list_th.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
+			}
 
+			if($result_lb != null)
+			foreach ($result_lb as $key => $value) {
+				$branch_list_lb.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
+			}
+
+			$data = array('branchListTH' => $branch_list_th,
+				'branchListLB'  => $branch_list_lb,
+				'coordinator'	=> $coordinator,
+				'id' => $userid 	
+			);
+
+			$dataHead = array( 'domain_name' => 'Attendance System',);
+
+			$this->load->view('header',$dataHead);
+			$this->load->view('classes',$data);
 		}
-
-		if($result_lb != null)
-		foreach ($result_lb as $key => $value) {
-			$branch_list_lb.='<option value='.$value->id.'>'.$value->course." ".$value->branch." ".$value->year." ".$value->section.'</option>';
-         	$subject_list_lb.='<option value='.$value->id1.'>'.$value->subject_code." ".$value->subject_name.'</option>';
-          	$subject_code_lb.='<option value='.$value->id.'>'.$value->id1.'</option>';
-
-		}
-
-		$data = array('branchListTH' => $branch_list_th,
-			'subjectListTH' => $subject_list_th,
-			'subjectCodeTH' => $subject_code_th,
-			'branchListLB'  => $branch_list_lb,
-			'subjectListLB' => $subject_list_lb,
-			'subjectCodeLB' => $subject_code_lb,
-			'coordinator'	=> $coordinator,
-			'id' => $userid 	
-		);
-		$dataHead = array( 'domain_name' => 'Attendance System',);
-
-		$this->load->view('header',$dataHead);
-		$this->load->view('classes',$data);
 		$this->load->view('footer');
 		
 	}

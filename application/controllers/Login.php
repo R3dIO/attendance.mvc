@@ -28,7 +28,16 @@ class Login extends CI_Controller {
 	}
 	public function index()
 	{
-		$this->load->view('index');
+		if($this->session->userdata('userid')) {
+			$data = array( 'domain_name' => 'Faculty Panel',
+				'username' => $this->session->userdata('username'),
+				'password' => $this->session->userdata('password'),
+				'user' => $this->session->userdata('user'),
+		 	);
+			$this->load->view('header',$data);
+			$this->load->view('teachersPanel',$data);
+		} else
+			$this->load->view('index');
 		$this->load->view('footer');
 	}
 
@@ -44,14 +53,23 @@ class Login extends CI_Controller {
 			$data = array('id' => $result[0]->id);
 			$this->session->set_userdata('username', $result[0]->username);
 			$this->session->set_userdata('userid', $result[0]->id);
-			$this->session->set_userdata('password', $result[0]->pass);
 			
 			$result=$this->login_model->sessionData($data);
 			$this->session->set_userdata('user', $result[0]->name);
-			redirect('domain_selector');
+			echo 'success';
 		}
 		else{
-			$this->index();
+			echo 'failed';
 		}
+	}
+
+	public function logout() {
+		$this->session->sess_destroy();
+		$this->load->view('index');
+		$this->load->view('footer');
+	}
+
+	public function about() {
+		$this->load->view('about');
 	}
 }

@@ -11,58 +11,6 @@
 </head>
 
 <script type="text/javascript">
-function SetSubTh() {
-
-  var subject=document.getElementById("subjectdetailth");
-  var hidden_sub=document.getElementById("hidden_subth");
-  var hidden=document.getElementById("hiddenth");
-  //console.log(subject + hidden_sub + hidden);
-  while(subject.options.length)
-    	subject.remove(0);
-
-  for(i=0;i<hidden.options.length;i++) {
-    if(hidden.options[i].value == document.selectclass.classdetail.value) {
-	    for(j=0;j<hidden_sub.options.length;j++){
-	        if(hidden.options[i].text == hidden_sub.options[j].value) {
-		        var op=document.createElement("OPTION");
-		        op.value=hidden_sub.options[j].value;
-		        op.text=hidden_sub.options[j].text;
-		        subject.options.add(op);
-		        break;            
-	      }
-	    }
-  	}
-  }
-}
-</script>
-
-<script type="text/javascript">
-function SetSubLb() {
-  
-  var subject=document.getElementById("subjectdetaillb");
-  var hidden_sub=document.getElementById("hidden_sublb");
-  var hidden=document.getElementById("hiddenlb");
-  
-  while(subject.options.length)
-     	subject.remove(0);
-  
-  for(i=0;i<hidden.options.length;i++) {
-    if(hidden.options[i].value == document.selectlab.classdetail.value) {
-	    for(j=0;j<hidden_sub.options.length;j++){
-	        if(hidden.options[i].text == hidden_sub.options[j].value) {
-		        var op=document.createElement("OPTION");
-		        op.value=hidden_sub.options[j].value;
-		        op.text=hidden_sub.options[j].text;
-		        subject.options.add(op);
-		        break;
-	      }
-	    }
-  	}
-  }
-}
-</script>
-
-<script type="text/javascript">
   function checkFormth(form)
   {
     if(form.classdetail.value == "Select Class") {
@@ -100,6 +48,15 @@ function SetSubLb() {
   }
 </script>
 
+<script type="text/javascript">
+	window.addEventListener("pageshow", function(event) {
+		var history = event.persisted || (typeof window.performance != "undefined" & window.performance.navigation.type === 2);
+		if(history) {
+			window.location.reload(true);
+		}
+	});
+</script>
+
 <body>
 <center>
 	<br><br>
@@ -130,21 +87,14 @@ function SetSubLb() {
 					    <select class="form-control" id="subjectdetailth" name="subjectdetail" onChange="SetSubTh(this)">
 					    	<option>Select Subject</option>
 					    </select>
-					    <select class="form-control" id="hiddenth" name="hiddenth" hidden>
-					   		<?php echo $subjectListTH;?>
-					    </select>
-
-					    <select class="form-control" id="hidden_subth" name="hidden_subth" hidden>
-					   		<?php echo $subjectCodeTH;?>
-					    </select>
 
 						<input type="hidden" name="batch" value='0'>
 				</div>
 		    </div>
 
  			</div>
-			<button type="submit" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
-			<button type="submit" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="view.php">View Attendance</button>
+			<button type="submit" id="newth" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
+			<button type="submit" id="viewth" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="view.php">View Attendance</button>
 		</form>
 	</div>
 <?php }?>
@@ -161,7 +111,7 @@ function SetSubLb() {
 			   		<label for="example-date-input" class="col-col-form-label"><b>Lab</b></label><br>
 			    
 			    <div class="col-md-8">
-				    <select class="form-control " id="classdetaillb" name="classdetail" onChange="SetSubLb(this)">
+				    <select class="form-control " id="classdetaillb" name="classdetail" onChange="loadSubjects('<?php echo base_url(); ?>', <?php echo $id; ?>,'lab')">
 				    
 				    <option>Select Lab</option>
 				   		<?php echo $branchListLB;?>
@@ -169,14 +119,6 @@ function SetSubLb() {
 
 				    <select class="form-control " id="subjectdetaillb" name="subjectdetail" onChange="SetSubLb(this)">
 				  		<option>Select Subject</option>
-				    </select>
-
-				    <select class="form-control" id="hiddenlb" name="hiddenlb" hidden>
-				   		<?php echo $subjectListLB;?>
-				    </select>
-
-				    <select class="form-control" id="hidden_sublb" name="hidden_sublb" hidden>
-				   		<?php echo $subjectCodeLB;?>
 				    </select>
 			    </div>
 
@@ -191,8 +133,8 @@ function SetSubLb() {
 					</div>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
-			<button type="submit" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="view.php">View Attendance</button>
+			<button type="submit" id="newlb" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
+			<button type="submit" id="viewlb" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="view.php">View Attendance</button>
 		</form>
 	</div>
 <?php } ?>

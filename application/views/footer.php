@@ -9,7 +9,7 @@
                         for any queries contact at: 15bcs157@ietdavv.edu.in 
                     </p>
                     <div id="bottom">
-                        <p class=""> Copyright © 2017 IET DAVV. All right reserved. </p>
+                        <p class=""> Copyright © 2019 IET DAVV. All right reserved. </p>
                     </div>
                 </div>
                 
