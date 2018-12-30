@@ -71,7 +71,7 @@
 <div class="col-md-12 row">
 <?php if($branchListTH!="") {?>
 	<div class="col-md-6 col-xs-12">
-		<form  name="selectclass" action="AttendancePanel.php" method="post" onsubmit="return checkFormth(this);"><center>
+		<form  name="selectclass" action="<?php echo base_url(); ?>index.php/SaveAttendance/attendancePanel" method="post" onsubmit="return checkFormth(this);"><center>
 			<div class="form-group">
 
    			<div class="col-md-3"></div>  
@@ -87,6 +87,16 @@
 					    <select class="form-control" id="subjectdetailth" name="subjectdetail" onChange="SetSubTh(this)">
 					    	<option>Select Subject</option>
 					    </select>
+<<<<<<< Updated upstream
+=======
+					    <select class="form-control" id="hiddenth" name="hidden_subl_th" hidden>
+					   		<?php echo $subjectListTH;?>
+					    </select>
+
+					    <select class="form-control" id="hidden_subth" name="hidden_subc_th" hidden>
+					   		<?php echo $subjectCodeTH;?>
+					    </select>
+>>>>>>> Stashed changes
 
 						<input type="hidden" name="batch" value='0'>
 				</div>
@@ -120,6 +130,17 @@
 				    <select class="form-control " id="subjectdetaillb" name="subjectdetail" onChange="SetSubLb(this)">
 				  		<option>Select Subject</option>
 				    </select>
+<<<<<<< Updated upstream
+=======
+
+				    <select class="form-control" id="hiddenlb" name="hidden_subl_lb" hidden>
+				   		<?php echo $subjectListLB;?>
+				    </select>
+
+				    <select class="form-control" id="hidden_sublb" name="hidden_subc_lb" hidden>
+				   		<?php echo $subjectCodeLB;?>
+				    </select>
+>>>>>>> Stashed changes
 			    </div>
 
 			<br>
