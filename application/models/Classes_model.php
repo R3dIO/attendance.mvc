@@ -57,9 +57,9 @@ public function fetchFacultySubjects($faculty_id,$class_id) {
 
 public function fetchSubject($id,$type) {
 	if($type == 'theory')
-		$query = $this->db->query("SELECT subject_code,subject_name from subject_table where id='$id' and (type=0 or type=2)");
+		$query = $this->db->query("SELECT id,subject_name from subject_table where id='$id' and (type=0 or type=2)");
 	else if($type == 'lab')
-		$query = $this->db->query("SELECT subject_code,subject_name from subject_table where id='$id' and (type=1 or type=2)");
+		$query = $this->db->query("SELECT id,subject_name from subject_table where id='$id' and (type=1 or type=2)");
 	return $query->result();
 }
 

@@ -87,24 +87,14 @@
 					    <select class="form-control" id="subjectdetailth" name="subjectdetail" onChange="SetSubTh(this)">
 					    	<option>Select Subject</option>
 					    </select>
-<<<<<<< Updated upstream
-=======
-					    <select class="form-control" id="hiddenth" name="hidden_subl_th" hidden>
-					   		<?php echo $subjectListTH;?>
-					    </select>
-
-					    <select class="form-control" id="hidden_subth" name="hidden_subc_th" hidden>
-					   		<?php echo $subjectCodeTH;?>
-					    </select>
->>>>>>> Stashed changes
-
+		
 						<input type="hidden" name="batch" value='0'>
 				</div>
 		    </div>
 
  			</div>
 			<button type="submit" id="newth" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
-			<button type="submit" id="viewth" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="view.php">View Attendance</button>
+			<button type="submit" id="viewth" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="<?php echo base_url(); ?>index.php/ViewAttendance/generateTable">View Attendance</button>
 		</form>
 	</div>
 <?php }?>
@@ -130,17 +120,7 @@
 				    <select class="form-control " id="subjectdetaillb" name="subjectdetail" onChange="SetSubLb(this)">
 				  		<option>Select Subject</option>
 				    </select>
-<<<<<<< Updated upstream
-=======
-
-				    <select class="form-control" id="hiddenlb" name="hidden_subl_lb" hidden>
-				   		<?php echo $subjectListLB;?>
-				    </select>
-
-				    <select class="form-control" id="hidden_sublb" name="hidden_subc_lb" hidden>
-				   		<?php echo $subjectCodeLB;?>
-				    </select>
->>>>>>> Stashed changes
+				    
 			    </div>
 
 			<br>

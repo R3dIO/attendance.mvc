@@ -81,7 +81,7 @@ class Selector extends CI_Controller {
 		foreach ($result as $key => $value) {
 			$subject = $this->classes_model->fetchSubject($value->subject_id,$_POST['type']);
 			foreach($subject as $k=>$v) {
-				$array[$v->subject_code] = $v->subject_name;
+				$array[$v->id] = $v->subject_name;
 			}
 		}
 		echo json_encode($array);
