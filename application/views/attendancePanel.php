@@ -2,6 +2,38 @@
 <head>
 
 <link href="<?php echo base_url(); ?>css/table.css" rel="stylesheet" type="text/css">    
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+</head>
+<body>
+<center>
+    <div class="col-md-10">
+    <br>
+    <form action="<?php echo base_url(); ?>index.php/SaveAttendance/saveAttendanceRecords" method="post">
+    <div class="form-group form-inline">
+        <label for="example-date-input" class="col-form-label"><b>Date</b></label>
+        <div class="col-md-3 col-sm-8">
+            <input class="form-control" type="date"  value="<?php date_default_timezone_set('Asia/Kolkata'); echo  date("Y-m-d");?>" id="datePicker" name="date-input" required>
+        </div>
+    </div>
+<div class="card-block">
+<blockquote class="card-blockquote">
+    <div class="col-md-4 checkbox">
+    <input type="checkbox" onClick="toggle(this)" /> <div id="check">Check All</div><br/>
+    </div>
+    <div class="container border border-success">  
+    <div id="no-more-tables">
+            <table style="width:100%">
+            <?php echo $student_list; ?>
+            </table>
+        </div>
+        </div><br><br>
+    </div>
+</blockquote>
+    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</div>
+</form>
+</center>
+</div>
 <script language="JavaScript">
 
 //function to check & uncheck all the elements
@@ -35,42 +67,9 @@
             }
 
 }
-</script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-</head>
-<body>
-<center>
-    <div class="col-md-10">
-    <br>
-    <form action="<?php echo base_url(); ?>index.php/SaveAttendance/saveAttendanceRecords" method="post">
-    <div class="form-group form-inline">
-        <label for="example-date-input" class="col-form-label"><b>Date</b></label>
-        <div class="col-md-3 col-sm-8">
-            <input class="form-control" type="date"  value="<?php date_default_timezone_set('Asia/Kolkata'); echo  date("Y-m-d");?>" id="datePicker" name="date-input" required>
-        </div>
-    </div>
-<div class="card-block">
-<blockquote class="card-blockquote">
-    <div class="col-md-4 checkbox">
-    <input type="checkbox" onClick="toggle(this)" /> <div id="check">Check All</div><br/>
-    </div>
-    <div class="container border border-success">  
-    <div id="no-more-tables">
-            <table style="width:100%">
-            <?php echo $student_list; ?>
-            </table>
-        </div>
-        </div><br><br>
-    </div>
-</blockquote>
-    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-</div>
-</form>
-</center>
-</div>
-<script>
-    $(function () {
-    $('.button-checkbox').each(function () {
+
+     $(function () {
+        $('.button-checkbox').each(function () {
 
         // Settings
         var $widget = $(this),

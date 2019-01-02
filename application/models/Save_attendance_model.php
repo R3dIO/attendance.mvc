@@ -2,60 +2,6 @@
 
 Class Save_attendance_model extends CI_Model {
 
-public function scheduleId($data){
-	$this->db->select('id');
-	$this->db->from('schedule_table');
-	$this->db->where('class_id =',$data['ClassId']);
-	$this->db->where('subject_id =',$data['SubjectId']);
-	$this->db->where('batch =', $data['Batch']);
-	$query = $this->db->get();
-		if ($query->num_rows() > 0) 
-			{ return $query->result(); } 
-		else 
-			{ return false; }
-}
-
-public function className($data) {
-
-	$this->db->select('id');
-	$this->db->from('schedule_table');
-	$this->db->where('class_id =',$data['ClassId']);
-	$this->db->where('subject_id =',$data['SubjectId']);
-	$this->db->where('batch =', $data['Batch']);
-	$query = $this->db->get();
-
-		if ($query->num_rows() > 0) 
-			{ return $query->result(); } 
-		else 
-			{ return false; }
-}
-
-public function studentList($data) {
-	
-	$this->db->select('*');
-	$this->db->from('student_table');
-	$this->db->where('class_id =',$data['ClassId']);
-	$query = $this->db->get();
-
-		if ($query->num_rows() > 0) 
-			{ return $query->result(); } 
-		else 
-			{ return false; }
-}
-
-public function studentListLb($data) {
-	
-	$this->db->select('*');
-	$this->db->from('student_table');
-	$this->db->where('class_id =',$data['ClassId']);
-	$this->db->where('batch =', $data['Batch']);
-	$query = $this->db->get();
-
-		if ($query->num_rows() > 0) 
-			{ return $query->result(); } 
-		else 
-			{ return false; }
-}
 
 public function lastLectureNo($data){
 		
@@ -119,6 +65,54 @@ public function updateLLDate($date,$scheduleId,$lectureColumn){
 			return true;
 		else
 			return false;
+}
+
+public function retrieveAttendance($lectureNo,$scheduleId){
+	$this->db->select($lectureNo.',roll_no,present_no');
+	$this->db->from('attendance_table');
+	$this->db->join('student_table','attendance_table.student_id=student_table.id','inner');
+	$this->db->where('schedule_id = ', $scheduleId);
+	$query = $this->db->get();
+		if ($query->num_rows() > 0) 
+			{ return $query->result(); } 
+		else 
+			{ return false; }
+}
+
+public function updateTotalAbsent($scheduleId,$rollNo){
+	$query = $this->db->query("update attendance_table set present_no=present_no-1 where schedule_id=$scheduleId and attendance_table.student_id=(SELECT id from student_table where roll_no='$rollNo')");
+	return $query;
+}
+
+public function updateAbsent($scheduleId,$attendance,$lectureNo){
+	$query = $this->db->query("update attendance_table set $lectureNo=0 where schedule_id=$scheduleId and attendance_table.student_id=(select id from student_table where roll_no='$attendance')");
+	return $query;
+}
+
+public function updatePresent($scheduleId,$attendance,$lectureNo){
+	$query = $this->db->query("update attendance_table set $lectureNo=1 where schedule_id=$scheduleId and attendance_table.student_id=(select id from student_table where roll_no='$attendance')");
+	return $query;
+}
+
+public function retrieveTotalNo($scheduleId,$attendance){
+	$query = $this->db->query("select present_no from attendance_table where schedule_id=$scheduleId and attendance_table.student_id=(select id from student_table where roll_no='$attendance')");
+	return $query->result();
+}
+
+
+public function updateTotalPresent($scheduleId,$rollNo){
+	$query = $this->db->query("update attendance_table set present_no=present_no+1 where schedule_id=$scheduleId and attendance_table.student_id=(select id from student_table where roll_no='$rollNo')");
+	return $query;
+}
+
+public function updateLastLecNum($lectureColumn,$date,$scheduleId){
+	$query = $this->db->query("update schedule_table set $lectureColumn='$date' where id=$scheduleId");
+	return $query;
+}
+
+public function updateLastLecDate($scheduleId,$date){
+	$query = $this->db->query("update schedule_table set last_lecture_date='$date' where id=$scheduleId and (last_lecture_date<'$date' or last_lecture_date is null)");
+	return $query;
 }
 
 }

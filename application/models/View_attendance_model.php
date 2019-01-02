@@ -53,8 +53,9 @@ public function studentList($data,$col) {
 		$this->db->where('schedule_table.class_id = ', $data['ClassId']);
 		$this->db->where('schedule_table.subject_id = ', $data['SubjectId']);
 		$this->db->where('schedule_table.batch = ', $data['Batch']);
-		$this->db->where('student_table.batch = ', $data['Batch']);
+		$this->db->where('student_table.batch = ', $data['Batch']);	
 		$query = $this->db->get();
+		//echo "<pre>";print_r($query);exit;
 	}
 
 	if ($query->num_rows() > 0) 

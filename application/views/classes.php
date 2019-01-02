@@ -71,7 +71,7 @@
 <div class="col-md-12 row">
 <?php if($branchListTH!="") {?>
 	<div class="col-md-6 col-xs-12">
-		<form  name="selectclass" action="<?php echo base_url(); ?>index.php/SaveAttendance/attendancePanel" method="post" onsubmit="return checkFormth(this);"><center>
+		<form  name="selectclass" action="<?php echo base_url(); ?>index.php/AttendancePanel/attendancePanel" method="post" onsubmit="return checkFormth(this);"><center>
 			<div class="form-group">
 
    			<div class="col-md-3"></div>  
