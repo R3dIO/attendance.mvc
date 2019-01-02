@@ -29,53 +29,7 @@ class SaveAttendance extends CI_Controller {
 		$this->load->view('footer');
 	}
 
-	public function attendancePanel()
-	{
-		$data = array(
-		'ClassId' => $this->input->post('classdetail'),
-		'SubjectId' => $this->input->post('subjectdetail'),	
-		'Batch' => $this->input->post('batch'),
-		'FacultyId' => $this->session->userdata('userid')
-		);
-		$this->session->set_userdata($data);
-		//print_r($data);
-
-		$scheduleId = $this->Save_attendance_model->scheduleId($data);
-		$this->session->set_userdata('scheduleId',$scheduleId[0]->id);
-
-		if ($data['Batch'] == 0) {
-			$studentList = $this->Save_attendance_model->studentList($data);
-		}
-		else{
-			$studentList = $this->Save_attendance_model->studentListLb($data);	
-		}
-		//print_r($studentList);
-		$list_in="";	$i=0; 	$list_out="";
-
-		foreach ($studentList as $key => $value) {
-			$list_in.='<td data-title="'.$value->name.'"><span class="button-checkbox">
-        	<button type="button" class="btn btnchk" data-color="success" title="'.$value->name.'">'.$value->roll_no.'</button>
-        	<input type="checkbox" class="hidden-sm-up hidden-sm-right" name="attendanceRecords[]" id="present" value="'.$value->id.'" />
-    		</span></td>';
-    		$i++;
-
-    		if($i==6){ 
-                $list_in='<tr>'.$list_in.'</tr>';
-                $list_out.=$list_in;
-                $list_in="";
-                $i=0;
-            }        
-		}
-
-		if($i>0) {
-          	$list_in='<tr>'.$list_in.'</tr>';
-           	$list_out.=$list_in;
-        }
-
-		$data= array('student_list' => $list_out, );
-		$this->index($data);
-	}
-
+	
 	public function saveAttendanceRecords(){
 		$attendanceRecords = $_POST['attendanceRecords'];
 		$data = array('classId' => $this->session->userdata('ClassId'),
@@ -114,8 +68,48 @@ class SaveAttendance extends CI_Controller {
 			else
 				$success = 'Unable to save records';
 			echo "<html><head><script>";
-			echo "alert(".$success.");";
+			echo "window.onload = function() {";
+			echo "alert(' ".$success." ');";
 			echo "window.location.href = ' ".base_url()."index.php/class_selector';";
+			echo "};";
 			echo "</script></head></html>";
-	}		
+	}	
+
+	public function editAttendanceRecords(){
+		$scheduleId = $this->session->userdata('scheduleId');
+		$attendanceRecords = $_POST['attendanceRecords'];
+		$lectureId = $this->session->userdata('lectureNo');
+		$date = $this->input->post('date');
+		$lastLectureNo = $this->Save_attendance_model->lastLectureNo($scheduleId);
+		$lastLectureNo = $lastLectureNo[0]->last_lecture_no;
+
+		$rollNumbers = $this->Save_attendance_model->retrieveAttendance($lectureId,$scheduleId);
+		//print_r($rollNumbers);
+		foreach ($rollNumbers as $key => $value) {
+			$rollNo = $value->roll_no;	
+			if ($value->$lectureId == 1){
+				$this->Save_attendance_model->updateTotalAbsent($scheduleId,$rollNo);
+			}
+			$this->Save_attendance_model->updateAbsent($scheduleId,$rollNo,$lectureId);
+		}
+
+		foreach ($attendanceRecords as $key => $attendance) {
+			$this->Save_attendance_model->updatePresent($scheduleId,$rollNo,$lectureId);
+			$this->Save_attendance_model->retrieveTotalNo($scheduleId,$attendance);
+			$this->Save_attendance_model->updateTotalPresent($scheduleId,$rollNo);
+		}
+
+		$updateLLN = $this->Save_attendance_model->updateLastLecNum($lectureId,$date,$scheduleId);
+		$updateLLd = $this->Save_attendance_model->updateLastLecDate($scheduleId,$date);
+
+		if($updateLLN and $updateLLd)
+			$success = "Attendance update Successfully";
+		
+			echo "<html><head><script>";
+		//	echo "window.onload = function() {";
+			echo "alert(' ".$success." ');";
+			echo "window.location.href = ' ".base_url()."index.php/class_selector';";
+			echo "};";
+			echo "</script></head></html>"; 	
+	}	
 }

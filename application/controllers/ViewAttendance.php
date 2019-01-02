@@ -27,10 +27,9 @@ class ViewAttendance extends CI_Controller {
 		$this->session->set_userdata('batch',$data['Batch']);
 		$session="";
 
-		$scheduleId = $this->Save_attendance_model->scheduleId($data); 
+		$scheduleId = $this->Attendance_panel_model->scheduleId($data);// print_r($scheduleId);
 		$scheduleId = $scheduleId[0]->id;
-		if(is_int($scheduleId))
-			$this->session->set_userdata('scheduleId',$scheduleId);
+		$this->session->set_userdata('scheduleId',$scheduleId);
 		$dates = $this->View_attendance_model->scheduleTable($data);
 
 		foreach ($dates as $date) {
@@ -74,7 +73,8 @@ class ViewAttendance extends CI_Controller {
 			 	$col.="attendance_table.".$key.",";
 			 	$dl=substr($value,8,2)."-".substr($value,5,2);
 			 	//print_r($total_present);	print_r($key);var_dump();
-          		$datestring.='<td>'.$dl.'<br><b>('.$total_present[$str_count].')</b><div class="radio"><input type="radio" id="date" name="date1" value='.$key.'></div></td>';
+          		$datestring.='<td>'.$dl.'<br><b>('.$total_present[$str_count].')
+          		</b><div class="radio"><input type="radio" id="date" name="dateEdit" value='.$key.'></div></td>';
 			 }
 			 $str_count++; 
 		}
@@ -91,10 +91,9 @@ class ViewAttendance extends CI_Controller {
                 	{ $student->$key ='A' ; }
 			}
 
-			if( $student->present_no == null ){
-				$n=1;
+			if( $student->present_no == null )
                 $m=0;
-			}
+			
 			else $m=$lecture_no;
 
 			if($this->input->post('relative')==1)

@@ -173,9 +173,9 @@ $(document).ready(function() {
 </table>
 
 
-<form class="btn-sm" action="edit_panel.php" method="post" name="edit" onsubmit="return dateCheck(this);">
+<form class="btn-sm" action="<?php echo base_url(); ?>index.php/AttendancePanel/editPanel" method="post" name="edit" onsubmit="return dateCheck(this);">
    
-<button type="submit" name='relative' id="relative" class="btn btn-primary" value="1" formaction="view.php" >Relative</button>
+<button type="submit" name='relative' id="relative" class="btn btn-primary" value="1" formaction="<?php echo base_url(); ?>index.php/ViewAttendance/generateTable" >Relative</button>
 <input class="col-md-2" type="number" id="relbox" name="limit">    
 <p> </p>
 <div class="row ">
