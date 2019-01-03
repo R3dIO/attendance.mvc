@@ -2,7 +2,11 @@
 <script language="JavaScript">
 //function to check & uncheck all the elements
     function toggle(source) {
+<<<<<<< HEAD
           checkboxes = document.getElementsByName('attendanceRecords[]');
+=======
+          checkboxes = document.getElementsByName('present[]');
+>>>>>>> master
           check1=document.getElementsByClassName('btn');
           for(var i=0, n=checkboxes.length;i<n;i++) {
               checkboxes[i].checked = source.checked;
