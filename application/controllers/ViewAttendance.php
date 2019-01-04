@@ -6,12 +6,9 @@ class ViewAttendance extends CI_Controller {
 	parent::__construct();
 
 	}
-	public function index($data)
+	public function index()
 	{
-		$headdata = array('domain_name' => "Attendance System");
-		$this->load->view('header',$headdata);
-		$this->load->view('viewAttendancePanel',$data);
-		$this->load->view('footer');
+		
 	}
 
 	public function generateTable()
@@ -21,7 +18,7 @@ class ViewAttendance extends CI_Controller {
 		'ClassId' => $this->input->post('classdetail'),
 		'SubjectId' => $this->input->post('subjectdetail'),	
 		'Batch' => $this->input->post('batch'),
-		'limit' => $this->input->post('limit'),
+		'limit' => isset($_POST['limit'])?$this->input->post('limit'):-1,
 		'FacultyId' => $this->session->userdata('userid')
 		);
 		$this->session->set_userdata('batch',$data['Batch']);
@@ -30,21 +27,18 @@ class ViewAttendance extends CI_Controller {
 		$scheduleId = $this->Attendance_panel_model->scheduleId($data);// print_r($scheduleId);
 		$scheduleId = $scheduleId[0]->id;
 		$this->session->set_userdata('scheduleId',$scheduleId);
-		$dates = $this->View_attendance_model->scheduleTable($data);
+		$dates = $this->View_attendance_model->scheduleTable($data);// print_r($dates[0]);
 
-		foreach ($dates as $date) {
-			$lecture_no = $date->last_lecture_no;
+			$lecture_no = $dates[0]->last_lecture_no;
 			for($i=1;$i<=$lecture_no;$i++){    
-					$l='l'.$i;  
-           		    $dl=$date->$l;
-          		    $sdate[$l]=$dl;
+					$l='l'.$i; 
+          		    $sdate[$l]=$dates[0]->$l;
           		}
                 asort($sdate);
-                $session = substr($dl,0,4);
+                $session = substr($dates[0]->last_lecture_date,0,4);
 
-                $relative = $this->input->post('relative');
-                if(($relative==1))	{   
-             		$date_val=$_POST['date1'];
+                if(isset($_POST['relative']) && isset($_POST['dateEdit']) && $_POST['relative']==1)	{   
+             		$date_val=$_POST['dateEdit'];
               		$date_val = array_search($date_val, array_keys($sdate));
               		$start=$date_val;
               	}
@@ -53,18 +47,17 @@ class ViewAttendance extends CI_Controller {
       			}
 
       			if($data['limit'] > 0 && $data['limit'] <= $lecture_no){ 
-          			$lecture_no = $limit+$start;
+          			$lecture_no = $data['limit']+$start-1;
              	}
 
              	$total_present = array(); 
 				foreach ($sdate as $key => $value) {
-					$count = $this->View_attendance_model->studentCount($key,$scheduleId);
+					$count = $this->View_attendance_model->studentCount($key,$scheduleId);// print_r($count);
 					foreach ($count as $pno) {
 						 array_push($total_present, $pno->presentNo);
 					}
 				}
 				//print_r($total_present);
-		}
 
 		$col = ""; 	$str_count = 0;	$datestring = "";
 
@@ -81,22 +74,22 @@ class ViewAttendance extends CI_Controller {
 		$str_count++; 
 
  		$col = substr($col,0,strlen($col)-1);
- 		$studentList = $this->View_attendance_model->studentList($data,$col);
+ 		$studentList = $this->View_attendance_model->studentList($data,$col);// print_r($studentList);
 		$list="";
 		foreach ($studentList as  $student) {
 			foreach ($sdate as $key => $value) {
-				if(	$student->$key == 1	)
+				if(isset($student->$key) && $student->$key == 1	)
                 	{ $student->$key = 'P'; }
-            	elseif( $student->$key == 0 )
+            	elseif(isset($student->$key) && $student->$key == 0 )
                 	{ $student->$key ='A' ; }
 			}
 
-			if( $student->present_no == null )
+			/*if( $student->present_no == null )
                 $m=0;
 			
-			else $m=$lecture_no;
+			else $m=$lecture_no;*/
 
-			if($this->input->post('relative')==1)
+			if(isset($_POST['relative']) && isset($_POST['dateEdit']) && $_POST['relative']==1)
 			{	$divider=$lecture_no-$start+1;	}
             else
             {  	$divider=$lecture_no;	}
@@ -113,7 +106,6 @@ class ViewAttendance extends CI_Controller {
 			    } $str_count++;
 			
 			$student->present_no = $count;
-			$count = 0;
           	$list.='<tr>
           	<td>'.$student->roll_no.'</td>
           	<td>'.$student->name.'</td>'.$num
@@ -123,16 +115,28 @@ class ViewAttendance extends CI_Controller {
 
 			}
 
-        	$data=array('session' => $session,
-        				'date' => $datestring,
-        				'list' => $list,
-        				'schedule' => $scheduleId,
-        				'divider' => $divider,
-        				'batch' => $data['Batch'],
-        				'class'	=> $data['ClassId'],
-        				'subject' => $data['SubjectId']
-        	 ); 
-        	$this->index($data);
+        $data=array('session' => $session,
+	        		'date' => $datestring,
+        			'list' => $list,
+	        		'schedule' => $scheduleId,
+	       			'divider' => $divider,
+	       			'batch' => $data['Batch'],
+	   				'class'	=> $data['ClassId'],
+     				'subject' => $data['SubjectId']
+	       	 );
+	    $table =  $this->load->view('view_table',$data,true);
+        if(isset($_POST['relative']) && $_POST['relative']==1) {
+        	$arr = array('div' => $divider,
+        				'table' => $table);
+        	echo json_encode($arr); 
+        }
+        else{
+        	$page = array('table' => $table);
+	        $headdata = array('domain_name' => "Attendance System");
+			$this->load->view('header',$headdata);
+			$this->load->view('viewAttendancePanel',$page);
+			$this->load->view('footer');
+		} 
 	}
 
 }

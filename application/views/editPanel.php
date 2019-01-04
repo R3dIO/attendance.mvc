@@ -41,8 +41,10 @@
 <body>
 <center>
 <div class="col-md-10"><br>
-  <form action="<?php echo base_url(); ?>index.php/SaveAttendance/editAttendanceRecords" method="post">
-     
+  <form action="<?php echo base_url(); ?>index.php/edit_attendance_save" method="post">
+     <input type="hidden" name="classdetail" value="<?php echo $classdetail; ?>">
+     <input type="hidden" name="subjectdetail" value="<?php echo $subjectdetail; ?>">
+     <input type="hidden" name="batch" value="<?php echo $batch; ?>">
       <div class="form-group form-inline">
           <label for="example-date-input" class="col-form-label">Date</label>
           <div class="col-md-3 col-sm-8">

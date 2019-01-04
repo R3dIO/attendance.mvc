@@ -8,11 +8,10 @@
 <center>
     <div class="col-md-10">
     <br>
-    <form action="<?php echo base_url(); ?>index.php/SaveAttendance/saveAttendanceRecords" method="post">
     <div class="form-group form-inline">
         <label for="example-date-input" class="col-form-label"><b>Date</b></label>
         <div class="col-md-3 col-sm-8">
-            <input class="form-control" type="date"  value="<?php date_default_timezone_set('Asia/Kolkata'); echo  date("Y-m-d");?>" id="datePicker" name="date-input" required>
+            <input class="form-control" type="date"  value="<?php date_default_timezone_set('Asia/Kolkata'); echo  date("Y-m-d");?>" id="datePicker" required>
         </div>
     </div>
 <div class="card-block">
@@ -29,9 +28,8 @@
         </div><br><br>
     </div>
 </blockquote>
-    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+    <button onclick="save_attendance('<?php echo base_url(); ?>')" class="btn btn-primary btn-lg">Submit</button>
 </div>
-</form>
 </center>
 </div>
 <script language="JavaScript">

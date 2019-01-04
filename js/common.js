@@ -50,8 +50,8 @@ function loadSubjects(baseurl,id,type)
 }
 
 function login_faculty(baseurl) {
-  username = $('#username').val();
-  password = $('#password').val();
+  var username = $('#username').val();
+  var password = $('#password').val();
 
   re = /^\w+$/;
   reg = /[a-z]/;
@@ -98,4 +98,55 @@ function login_faculty(baseurl) {
         }
     })
     }
+}
+
+function save_attendance(baseurl) {
+  var date = $('#datePicker').val();
+  var checked = [];
+  $.each($("input[name='attendanceRecords[]']:checked"), function(){
+    checked.push($(this).val());
+  });
+  var cnf;
+  if (checked.length == 0) 
+    cnf = confirm("Mark all absent!!");
+  else cnf = true;
+
+  if (cnf) {
+    $.ajax({
+          url : baseurl + "index.php/save_attendance",
+          type : "POST",
+          data : {date:date,attendanceRecords:checked},
+          success : function(data) {
+            if (data == 'saved') {
+              alert("Records Saved Successfully!!");
+              window.location.replace(baseurl+"index.php/class_selector");
+            } else alert("Records Not Saved. Please Try Again!!");
+          }
+      })
+  }
+}
+
+function relative_view(baseurl) {
+  var limit = $("input[name='limit']").val();
+  var classdetail = $("input[name='classdetail']").val();
+  var subjectdetail = $("input[name='subjectdetail']").val();
+  var batch = $("input[name='batch']").val();
+  var dateEdit = $("input[name='dateEdit']:checked").val();
+
+  if(!dateEdit && limit>0)
+    alert('Please Select any date!!');
+  else {
+    $('#tabpage').html('<h4>Loading...</h4>');
+    $.ajax({
+          url : baseurl + "index.php/view_attendance",
+          type : "POST",
+          dataType:"JSON",
+          data : {limit:limit,relative:1,classdetail:classdetail,subjectdetail:subjectdetail,batch:batch,dateEdit:dateEdit},
+          success : function(data) {
+            $('#tabpage').html(data.table);
+            init_table(data.div);
+            table.reload();
+          }
+      })
+  }
 }

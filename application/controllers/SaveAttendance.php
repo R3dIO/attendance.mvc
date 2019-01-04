@@ -21,58 +21,51 @@ class SaveAttendance extends CI_Controller {
 	public function __construct() {
 	parent::__construct();
 	}
-	public function index($data)
+	public function index()
 	{	
-		$dataHead = array( 'domain_name' => 'Attendance System',);
-		$this->load->view('header',$dataHead);
-		$this->load->view('attendancePanel',$data);
-		$this->load->view('footer');
+		
 	}
 
 	
 	public function saveAttendanceRecords(){
-		$attendanceRecords = $_POST['attendanceRecords'];
+		if (isset($_POST['attendanceRecords'])) 
+			$attendanceRecords = $_POST['attendanceRecords'];
+		else $attendanceRecords = null;
 		$data = array('classId' => $this->session->userdata('ClassId'),
 					'scheduleId' => $this->session->userdata('scheduleId'),
 					'batch' => $this->session->userdata('Batch'),
 		 );			
-		$date = date('Ymd', strtotime($_POST['date-input']));
+		$date = date('Ymd', strtotime($_POST['date']));
 		//echo $classId.'*'.$batch.'*'.$date;print_r($attendanceRecords);
 		$lastLectureNo = $this->Save_attendance_model->lastLectureNo($data['scheduleId']);
 		$lastLectureNo = ($lastLectureNo[0]->last_lecture_no) + 1;	
 		$updateResult = $this->Save_attendance_model->updateLLN($data['scheduleId'],$lastLectureNo);
+		if (!$updateResult) {
+			echo "not saved";
+			return;
+		}
 		
 		$lectureColumn = 'l'.$lastLectureNo;
-		if (sizeof($attendanceRecords) == 0 )
-				$this->Save_attendance_model->saveAttendance($data);
-				 	
-		foreach ($attendanceRecords as  $studentRecords) {
-
-			$attendanceTableStat = $this->Save_attendance_model->attendancetable($data['scheduleId']);
-
-			if ($attendanceTableStat)
-				$this->Save_attendance_model->saveAttendance($data);
-
-		}
-
+		$attendanceTableStat = $this->Save_attendance_model->checkAttendanceTable($data['scheduleId']);
+		if ($attendanceTableStat)
+			$this->Save_attendance_model->initAttendance($data);
 		$attendancedata = array('scheduleId' =>$this->session->userdata('scheduleId'),
-								'studentRecords' =>$studentRecords,
+								'studentRecords' =>$attendanceRecords,
 								'lectureColumn' =>$lectureColumn,
 			);	
-
 		$recordUpdate = $this->Save_attendance_model->updateAttendance($attendancedata);
+		if (!$recordUpdate) {
+			echo "not saved";
+			return;
+		}
+
 		$llDateUpdate = $this->Save_attendance_model->updateLLDate($date,$attendancedata['scheduleId'],$attendancedata['lectureColumn']);
-			
-			if ($llDateUpdate)
-				$success = 'Records saved Successfully';
-			else
-				$success = 'Unable to save records';
-			echo "<html><head><script>";
-			echo "window.onload = function() {";
-			echo "alert(' ".$success." ');";
-			echo "window.location.href = ' ".base_url()."index.php/class_selector';";
-			echo "};";
-			echo "</script></head></html>";
+		if (!$llDateUpdate){
+			echo "not saved";
+			return;
+		}
+		
+		echo "saved";	
 	}	
 
 	public function editAttendanceRecords(){
@@ -86,17 +79,22 @@ class SaveAttendance extends CI_Controller {
 		$rollNumbers = $this->Save_attendance_model->retrieveAttendance($lectureId,$scheduleId);
 		//print_r($rollNumbers);
 		foreach ($rollNumbers as $key => $value) {
-			$rollNo = $value->roll_no;	
-			if ($value->$lectureId == 1){
-				$this->Save_attendance_model->updateTotalAbsent($scheduleId,$rollNo);
-			}
-			$this->Save_attendance_model->updateAbsent($scheduleId,$rollNo,$lectureId);
+			$curr[$value->roll_no] = $value->$lectureId;
 		}
 
-		foreach ($attendanceRecords as $key => $attendance) {
-			$this->Save_attendance_model->updatePresent($scheduleId,$rollNo,$lectureId);
-			$this->Save_attendance_model->retrieveTotalNo($scheduleId,$attendance);
-			$this->Save_attendance_model->updateTotalPresent($scheduleId,$rollNo);
+		foreach ($attendanceRecords as $key => $value) {
+			if($curr[$value] == 0) {
+				$this->Save_attendance_model->updatePresent($scheduleId,$value,$lectureId);
+				$this->Save_attendance_model->updateTotalPresent($scheduleId,$value);
+			}
+			$curr[$value] = 2;
+		}
+
+		foreach ($curr as $key => $value) {
+			if($value == 1) {
+				$this->Save_attendance_model->updateAbsent($scheduleId,$key,$lectureId);
+				$this->Save_attendance_model->updateTotalAbsent($scheduleId,$key);
+			}
 		}
 
 		$updateLLN = $this->Save_attendance_model->updateLastLecNum($lectureId,$date,$scheduleId);
@@ -105,11 +103,9 @@ class SaveAttendance extends CI_Controller {
 		if($updateLLN and $updateLLd)
 			$success = "Attendance update Successfully";
 		
-			echo "<html><head><script>";
+			echo "<html><head><script src=\"".base_url()."js/jquery-3.3.1.min.js\"></script><script>";
 		//	echo "window.onload = function() {";
-			echo "alert(' ".$success." ');";
-			echo "window.location.href = ' ".base_url()."index.php/class_selector';";
-			echo "};";
-			echo "</script></head></html>"; 	
+			echo "$(document).ready(function() { alert(' ".$success." ');$('#form').submit(); } );";
+			echo "</script></head><body><form action=\"view_attendance\" method=\"post\" id=\"form\"><input type=\"hidden\" name=\"classdetail\" value=\"".$_POST['classdetail']."\"><input type=\"hidden\" name=\"subjectdetail\" value=\"".$_POST['subjectdetail']."\"><input type=\"hidden\" name=\"batch\" value=\"".$_POST['batch']."\"></form></body></html>"; 	
 	}	
 }

@@ -26,93 +26,60 @@
 <script src="<?php echo base_url(); ?>js/buttons.html5.min.js"></script>
 <script src="<?php echo base_url(); ?>js/buttons.print.min.js"></script>
 <script src="<?php echo base_url(); ?>js/dataTables.fixedColumns.min.js"></script>
-<script>
-$(document).ready(function() {
+<script type="text/javascript">
+  function init_table(div) {
+    var index = [];
+    for(i=2;i<=(parseInt(div)+1);i++) 
+      index.push(i);
+    var trg = JSON.parse(JSON.stringify(index));
+    if(div>6) {
+      table = $('#scroll').DataTable( {
+                      scrollY:        "500px",
+                      scrollX:        true,
+                      scrollCollapse: true,
+                      paging:         false,
+                      columnDefs: [ { orderable: false,  width: '20%',targets: trg } ],
+                      fixedColumns:   true,
+                      fixedColumns:   {
+                          leftColumns: 2,
+                          rightColumns: 1
+                      },
+                      responsive: true,
+                      ordering : true,
+                      dom: 'Bfrtip',
+                      buttons: [
+                          'copy', 'excel', 
+                      ],
+                  } );
+      } else {
+        table = $('#scroll').DataTable( {
+                      scrollY:        "500px",
+                      scrollX:        true,
+                      scrollCollapse: true,
+                      paging:         false,
+                      columnDefs: [ { orderable: false,  width: '20%',targets: trg } ],
+                      responsive: true,
+                      ordering : true,
+                      dom: 'Bfrtip',
+                      buttons: [
+                          'copy', 'excel', 
+                      ],
+                  } );
+      }
+            $('#min, #max').keyup( function() {
+                table.draw();
+            } );
+            $('td.status').each(function( index ) {
+                  if($( this ).text()== 'A'){
+                     $(this).css("background-color","#FF6947");
+                     //$(this).addClass('bg-warning');  
+                  }
+                  else if($( this ).text()== 'P'){
+                     $(this).css("background-color","#66ED44");
+                     //$(this).addClass('bg-success');
+                  }
+            });
 
-    var table = $('#scroll').DataTable( {
-        scrollY:        "500px",
-        scrollX:        true,
-        scrollCollapse: true,
-        paging:         false,
-        columnDefs: [ { orderable: false,  width: '20%',targets: [<?php for ($i=2;$i<=($divider+1);$i++){echo $i.',' ;}?>] } ],
-        <?php if($divider>6){
-        echo"
-        fixedColumns:   true,
-        fixedColumns:   {
-            leftColumns: 2,
-            rightColumns: 1
-        },";}?>
-        responsive: true,
-        ordering : true,
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'excel', 
-        ],
-    } );
-    
-} );
-</script>
-<script>
-    $.fn.dataTable.ext.search.push(
-    function( settings, data, dataIndex ) {
-        var min = parseInt( $('#min').val(), 10 );
-        var max = parseInt( $('#max').val(), 10 );
-        var per = parseFloat( data[<?php echo $divider+3;?>] ) || 0; 
-        // use data for the percentage column
-        if ( ( isNaN( min ) && isNaN( max ) ) ||
-             ( isNaN( min ) && per <= max ) ||
-             ( min <= per   && isNaN( max ) ) ||
-             ( min <= per   && per <= max ) )
-        {
-            return true;
-        }
-        return false;
-    }
-);
- 
-$(document).ready(function() {
-    var table = $('#scroll').DataTable();
-     
-    // Event listener to the two range filtering inputs to redraw on input
-    $('#min, #max').keyup( function() {
-        table.draw();
-    } );
-} );
-    
-</script>
-<script>
-    function dateCheck(){
-        if(!document.edit.date1.value)
-        {
-            alert("Please select a date");
-            return false;
-        }
-        
-        return true;
-        
-    }
- $( document ).ready(function() {
-    $('td.status').each(function( index ) {
-          if($( this ).text()== 'A'){
-             $(this).css("background-color","#FF6947");
-             //$(this).addClass('bg-warning');  
-          }
-          else if($( this ).text()== 'P'){
-             $(this).css("background-color","#66ED44");
-             //$(this).addClass('bg-success');
-          }
-    });
-});
-
-//$("#relative").click(function() {
-//    location.reload(true);
-//});
-
-</script>
-<script>
-    $(document).ready(
-    function(){          
-            
             $("#edit").hide();
             $("#relative").hide();
             //$("#pdf").hide();   
@@ -130,10 +97,43 @@ $(document).ready(function() {
         
          $('html, body').animate({
         scrollTop: $('#tabshow').offset().top
-                                 }, 'fast');  
-                                 
+                                 }, 'fast');
 
-    });
+    $.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+        var min = parseInt( $('#min').val(), 10 );
+        var max = parseInt( $('#max').val(), 10 );
+        var per = parseFloat( data[<?php echo $divider+3;?>] ) || 0; 
+        // use data for the percentage column
+        if ( ( isNaN( min ) && isNaN( max ) ) ||
+             ( isNaN( min ) && per <= max ) ||
+             ( min <= per   && isNaN( max ) ) ||
+             ( min <= per   && per <= max ) )
+        {
+            return true;
+        }
+        return false;
+    }
+);
+  }
+</script>
+<script>
+$(document).ready(function() {
+    var table;
+    init_table(<?php echo $divider; ?>);
+} );
+</script>
+<script type="text/javascript">
+  function dateCheck(){
+        if(!document.edit.dateEdit.value)
+        {
+            alert("Please select a date!!");
+            return false;
+        }
+        
+        return true;
+        
+    }
 </script>
 
 </head>
@@ -148,90 +148,9 @@ $(document).ready(function() {
 
 
 <?php if(!$list=="") { ?>
-<br>
-
-<h4>Total Lectures: <?php echo $divider;?></h4>
-<div class="row">
-<div class="col-md-5"></div>
- 
- <br>
-<button type="button" class="btn btn-info col-md-2" id="test" data-toggle="collapse" data-target="#demo">Show Features</button>
-
-<p align="right" class="col-md-5">
-<?php echo 'Academic Session - '.$session;?>
-</p>
-</div>
-
-<table align="center" border="0" cellspacing="5" cellpadding="5">
-        <tbody>
-        <tr id="percentage">
-            <td><b>Percentage <=</b></td>
-            <td><input class="col-md-12" type="text" id="max" name="max"></td>
-         
-        </tr>
-</tbody>
-</table>
-
-
-<form class="btn-sm" action="<?php echo base_url(); ?>index.php/AttendancePanel/editPanel" method="post" name="edit" onsubmit="return dateCheck(this);">
-   
-<button type="submit" name='relative' id="relative" class="btn btn-primary" value="1" formaction="<?php echo base_url(); ?>index.php/ViewAttendance/generateTable" >Relative</button>
-<input class="col-md-2" type="number" id="relbox" name="limit">    
-<p> </p>
-<div class="row ">
-<div class="col-md-1 ml-auto">
-<a href="admin/generate_pdf.php?schedule=<?php echo $schedule;?>">
-<input type="button"  id="pdf" name="schedule" style="align-content: left; border: black; margin-bottom: 5px;  "  class="btn btn-warning" value="PDF"></a>
-</div>
-<div class="col-sm-3 col-md-11 mx-auto"><input type="submit" id="edit" title="First check a button on any date to edit" value="EDIT" class="btn-sm btn-success btn-block" style="float: center; width: 25%; margin-right: 90px; "></div>
-<br>
-</div>
-<!-- self form submission-->
-<form  method="post">
-<input type="hidden" name="classdetail" value="<?php echo $class;?>">
-<input type="hidden" name="subjectdetail" value="<?php echo $subject;?>">
-<input type="hidden" name="batch" value="<?php echo $batch;?>">
-
-<!-- self form submission-->
-<div id="tabshow">
-<div  style="margin-left: 20px;margin-right: 20px;" >  
-  <table id="scroll" class="table table-bordered hover stripe row-border order-column">
-
-  <thead class="thead-dark">
-   
-    <tr>
-
-      <th>Roll No.</th>
-
-      <th>Name</th>
-
-      <?php echo $date;?>
-
-      <th>Present No.</th>
-
-      <th>Percentage</th>
-
-    </tr>  
-  </thead>
-</form>
-</form>
-  <tbody id="changeOrder">
-<?php echo $list; ?>
-  </tbody>
-</table>
-</section>
-</div>
-</div>
-  <div class="card-block">
-    <blockquote class="card-blockquote">
-    <div class="col-4">
-  </div>
-<div class="row">
-</div>
-</blockquote>
-</div>
-</div>
-</form>
+    <br>
+  <div id="tabpage">
+  <?php echo $table; ?>
 </div>
 <?php } else echo "<br><br><br><br><div class=\"col-xs-12\" style=\"height:200px;\"><h4>No Attendance To Show!!</h4></div>"; ?>
 </center>

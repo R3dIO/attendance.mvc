@@ -32,8 +32,8 @@
 <script type="text/javascript">
   function checkFormlb(form)
   {
-    if(form.classdetail.value == "Select Class") {
-      alert("Error: Please Select Class!");
+    if(form.classdetail.value == "Select Lab") {
+      alert("Error: Please Select Lab!");
       form.classdetail.focus();
       return false;
     }
@@ -71,7 +71,7 @@
 <div class="col-md-12 row">
 <?php if($branchListTH!="") {?>
 	<div class="col-md-6 col-xs-12">
-		<form  name="selectclass" action="<?php echo base_url(); ?>index.php/AttendancePanel/attendancePanel" method="post" onsubmit="return checkFormth(this);"><center>
+		<form  name="selectclass" action="<?php echo base_url(); ?>index.php/show_panel" method="post" onsubmit="return checkFormth(this);"><center>
 			<div class="form-group">
 
    			<div class="col-md-3"></div>  
@@ -94,7 +94,7 @@
 
  			</div>
 			<button type="submit" id="newth" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
-			<button type="submit" id="viewth" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="<?php echo base_url(); ?>index.php/ViewAttendance/generateTable">View Attendance</button>
+			<button type="submit" id="viewth" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="<?php echo base_url(); ?>index.php/view_attendance">View Attendance</button>
 		</form>
 	</div>
 <?php }?>

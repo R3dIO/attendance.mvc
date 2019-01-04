@@ -30,33 +30,13 @@ public function studentCount($key,$scheduleId){
 }
 
 public function studentList($data,$col) {
-
-	if($data['Batch'] > 0){
-		$this->db->select($col.',schedule_id,student_id,present_no');
-		$this->db->from('attendance_table');
-		$this->db->select('student_table.roll_no,student_table.name');
-		$this->db->form('schedule_table');
-		$this->db->join('attendance_table', 'schedule_table.id=attendance_table.schedule_id ', 'inner');
-		$this->db->join('student_table', 'student_table.id=attendance_table.student_id', 'inner');
-		$this->db->where('schedule_table.class_id = ', $data['ClassId']);
-		$this->db->where('schedule_table.subject_id = ', $data['SubjectId']);
-		$this->db->where('schedule_table.batch = ', $data['Batch']);
-		$this->db->where('student_table.batch = ', $data['Batch']);
-		$query = $this->db->get();
-	}
-
-	else {
-		$this->db->select($col.',schedule_id,student_id,present_no,student_table.roll_no,student_table.name');
-		$this->db->from('schedule_table');
-		$this->db->join('attendance_table', 'schedule_table.id=attendance_table.schedule_id ', 'inner');
-		$this->db->join('student_table', 'student_table.id=attendance_table.student_id', 'inner');
-		$this->db->where('schedule_table.class_id = ', $data['ClassId']);
-		$this->db->where('schedule_table.subject_id = ', $data['SubjectId']);
-		$this->db->where('schedule_table.batch = ', $data['Batch']);
-		$this->db->where('student_table.batch = ', $data['Batch']);	
-		$query = $this->db->get();
-		//echo "<pre>";print_r($query);exit;
-	}
+	$batch = $data['Batch'];
+	$class = $data['ClassId'];
+	$subject = $data['SubjectId'];
+	if($batch > 0)
+		$query = $this->db->query("SELECT $col,schedule_id,student_id,present_no,student_table.roll_no,student_table.name FROM schedule_table INNER JOIN attendance_table ON schedule_table.id=attendance_table.schedule_id INNER JOIN student_table ON student_table.id=attendance_table.student_id WHERE schedule_table.class_id=$class AND schedule_table.subject_id=$subject AND schedule_table.batch=$batch AND student_table.batch=$batch;");
+	else 
+		$query = $this->db->query("SELECT $col,schedule_id,student_id,present_no,student_table.roll_no,student_table.name FROM schedule_table INNER JOIN attendance_table ON schedule_table.id=attendance_table.schedule_id INNER JOIN student_table ON student_table.id=attendance_table.student_id WHERE schedule_table.class_id=$class AND schedule_table.subject_id=$subject AND schedule_table.batch=$batch;");
 
 	if ($query->num_rows() > 0) 
 		{ return $query->result(); } 

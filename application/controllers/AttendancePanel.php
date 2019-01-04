@@ -21,12 +21,9 @@ class AttendancePanel extends CI_Controller {
 	public function __construct() {
 	parent::__construct();
 	}
-	public function index($data)
+	public function index()
 	{	
-		$dataHead = array( 'domain_name' => 'Attendance System',);
-		$this->load->view('header',$dataHead);
-		$this->load->view('attendancePanel',$data);
-		$this->load->view('footer');
+		
 	}
 
 	public function attendancePanel()
@@ -73,7 +70,10 @@ class AttendancePanel extends CI_Controller {
         }
 
 		$data= array('student_list' => $list_out, );
-		$this->index($data);
+		$dataHead = array( 'domain_name' => 'Attendance System',);
+		$this->load->view('header',$dataHead);
+		$this->load->view('attendancePanel',$data);
+		$this->load->view('footer');
 	}
 
 	public function editPanel(){
@@ -117,7 +117,10 @@ class AttendancePanel extends CI_Controller {
         } 
 
         $data = array('list' => $listAll,
-        			  'date' => $lectureData,	
+        			  'date' => $lectureData,
+        			  'classdetail'	=> $this->input->post('classdetail'),
+        			  'subjectdetail' => $this->input->post('subjectdetail'),
+        			  'batch' => $this->input->post('batch'),
          );
         $dataHead = array( 'domain_name' => 'Attendance System',);
 		$this->load->view('header',$dataHead);
