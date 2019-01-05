@@ -103,7 +103,7 @@
     function( settings, data, dataIndex ) {
         var min = parseInt( $('#min').val(), 10 );
         var max = parseInt( $('#max').val(), 10 );
-        var per = parseFloat( data[<?php echo $divider+3;?>] ) || 0; 
+        var per = parseFloat( data[parseInt(div)+3] ) || 0; 
         // use data for the percentage column
         if ( ( isNaN( min ) && isNaN( max ) ) ||
              ( isNaN( min ) && per <= max ) ||
@@ -134,6 +134,31 @@ $(document).ready(function() {
         return true;
         
     }
+</script>
+<script type="text/javascript">
+  jQuery(document).ready(function($) {
+
+      if (window.history && window.history.pushState) {
+
+        $(window).on('popstate', function() {
+          var hashLocation = location.hash;
+          var hashSplit = hashLocation.split("#!/");
+          var hashName = hashSplit[1];
+
+          if (hashName !== '') {
+            var hash = window.location.hash;
+            if (hash === '') {
+              //alert('Back button was pressed.');
+                window.location='class_selector';
+                return false;
+            }
+          }
+        });
+
+        window.history.pushState('forward', null, './#forward');
+      }
+
+    });
 </script>
 
 </head>

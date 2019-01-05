@@ -136,7 +136,7 @@ function relative_view(baseurl) {
   if(!dateEdit && limit>0)
     alert('Please Select any date!!');
   else {
-    $('#tabpage').html('<h4>Loading...</h4>');
+    $('#tabpage').html('<br><h4>Loading...</h4><br><br><br>');
     $.ajax({
           url : baseurl + "index.php/view_attendance",
           type : "POST",

@@ -105,7 +105,7 @@
 <br class="rwd-break">
 <?php if($branchListLB!="") { ?>
 	<div class="col-md-6 col-xs-12">
-		<form name="selectlab" action="AttendancePanel.php" method="post" onsubmit="return checkFormlb(this);"><center>
+		<form name="selectlab" action="<?php echo base_url(); ?>index.php/show_panel" method="post" onsubmit="return checkFormlb(this);"><center>
 			<div class="form-group">
 			   <div class="col-md-3"></div> 
 			   		<label for="example-date-input" class="col-col-form-label"><b>Lab</b></label><br>
@@ -135,7 +135,7 @@
 				</div>
 			</div>
 			<button type="submit" id="newlb" class="btn btn-primary col-md-5" style="padding-left:40px;padding-right:40px">New Attendance</button>&nbsp;&nbsp;&nbsp;
-			<button type="submit" id="viewlb" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="view.php">View Attendance</button>
+			<button type="submit" id="viewlb" class="btn btn-info col-md-5" style="padding-left:40px;padding-right:40px" formaction="<?php echo base_url(); ?>index.php/view_attendance">View Attendance</button>
 		</form>
 	</div>
 <?php } ?>
