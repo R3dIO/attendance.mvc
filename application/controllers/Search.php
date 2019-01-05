@@ -37,11 +37,11 @@ class Search extends CI_Controller {
 		if($studentDetails)
 			$personalDetails = $this->Search_model->studentDetailsApp($studentDetails[0]->id);
 		$enroll= strtolower((string)$enroll);
-		$file_path= base_url()."student_photos/".$enroll.".jpg";
+		$file_path= base_url()."res/student_photos/".$enroll.".jpg";
 		if(file_exists($file_path) == 1)
-		   echo '<img src=" '.base_url().' student_photos/'.$enroll.'.jpg" width="20%">';
+		   echo '<img src=" '.base_url().'res/student_photos/'.$enroll.'.jpg" width="20%">';
 		else
-		   echo '<img src=" '.base_url().' student_photos/no_image.png" width="20%">';
+		   echo '<img src=" '.base_url().'res/student_photos/no_image.png" width="20%">';
 		
 		echo "<table>";
 		if($studentDetails)
