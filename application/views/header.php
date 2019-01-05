@@ -53,9 +53,9 @@
         <li class="nav-item">
           <div class="col-md-3 ">  <a class="nav-link" href="<?php echo site_url().'/logout'; ?>" style="color: aliceblue">Logout</a></div>
         </li>
-        <li class="nav-item">
+        <!--<li class="nav-item">
           <div class="col-md-3 ">  <input  class="btn btn-primary" type="button" value="Back" onclick="window.history.back()" /></div>
-        </li>  
+        </li>-->  
       </ul>
   </div>
 

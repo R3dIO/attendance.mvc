@@ -43,7 +43,7 @@
   </div>
 
   <div class="col-md-2 col-xs-12 col-sm-12">   
-    <a class="icon-wrapper" href="searchf.php"><i class="fa fa-pencil-square-o fa-4x  custom-icon"><span class="fix-editor">&nbsp;</span></i></a><br>
+    <a class="icon-wrapper" href="Search"><i class="fa fa-pencil-square-o fa-4x  custom-icon"><span class="fix-editor">&nbsp;</span></i></a><br>
     <a href="searchf.php"><h3>Search</h3></a>
   </div>
 

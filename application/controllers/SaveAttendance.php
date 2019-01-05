@@ -70,7 +70,7 @@ class SaveAttendance extends CI_Controller {
 
 	public function editAttendanceRecords(){
 		$scheduleId = $this->session->userdata('scheduleId');
-		$attendanceRecords = $_POST['attendanceRecords'];
+		$attendanceRecords = isset($_POST['attendanceRecords'])?$_POST['attendanceRecords']:-1;
 		$lectureId = $this->session->userdata('lectureNo');
 		$date = $this->input->post('date');
 		$lastLectureNo = $this->Save_attendance_model->lastLectureNo($scheduleId);
@@ -82,12 +82,14 @@ class SaveAttendance extends CI_Controller {
 			$curr[$value->roll_no] = $value->$lectureId;
 		}
 
-		foreach ($attendanceRecords as $key => $value) {
-			if($curr[$value] == 0) {
-				$this->Save_attendance_model->updatePresent($scheduleId,$value,$lectureId);
-				$this->Save_attendance_model->updateTotalPresent($scheduleId,$value);
+		if($attendanceRecords != -1) {
+			foreach ($attendanceRecords as $key => $value) {
+				if($curr[$value] == 0) {
+					$this->Save_attendance_model->updatePresent($scheduleId,$value,$lectureId);
+					$this->Save_attendance_model->updateTotalPresent($scheduleId,$value);
+				}
+				$curr[$value] = 2;
 			}
-			$curr[$value] = 2;
 		}
 
 		foreach ($curr as $key => $value) {
