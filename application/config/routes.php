@@ -61,5 +61,6 @@ $route['save_attendance'] = 'saveAttendance/saveAttendanceRecords';
 $route['view_attendance'] = 'ViewAttendance/generateTable';
 $route['edit_attendance'] = 'AttendancePanel/editPanel';
 $route['edit_attendance_save'] = 'SaveAttendance/editAttendanceRecords';
+$route['date_select'] = 'Selector/date_select';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

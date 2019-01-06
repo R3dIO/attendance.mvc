@@ -136,7 +136,7 @@ function relative_view(baseurl) {
   if(!dateEdit && limit>0)
     alert('Please Select any date!!');
   else {
-    $('#tabpage').html('<br><h4>Loading...</h4><br><br><br>');
+    $('#tabpage').html('<br><br><br><h4>Loading...</h4><br><br><br><br><br>');
     $.ajax({
           url : baseurl + "index.php/view_attendance",
           type : "POST",
@@ -149,4 +149,29 @@ function relative_view(baseurl) {
           }
       })
   }
+}
+
+function generate_pdf(baseurl,schedule) {
+  $.ajax({
+          url : baseurl + "index.php/ViewAttendance/generate_report",
+          type : "POST",
+          data : {schedule_id:schedule},
+          success : function(data) {
+            var element = document.createElement('a');
+            element.setAttribute('href',baseurl+'reports/'+data);
+            element.setAttribute('download',data);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            setTimeout(function() {
+              $.post(baseurl+"index.php/ViewAttendance/delete_report",{
+                        name:data
+                      }, function(data){});
+            },5000);
+          },
+          error : function(xhr,status,error) {
+            console.log(error);
+          }
+      })
 }

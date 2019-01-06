@@ -28,8 +28,7 @@
 <p> </p>
 <div class="row ">
 <div class="col-md-1 ml-auto">
-<a href="admin/generate_pdf.php?schedule=<?php echo $schedule;?>">
-<input type="button"  id="pdf" name="schedule" style="align-content: left; border: black; margin-bottom: 5px;  "  class="btn btn-warning" value="PDF"></a>
+<input type="button"  id="pdf" name="schedule" onclick="generate_pdf('<?php echo base_url(); ?>',<?php echo $schedule;?>)" style="align-content: left; border: black; margin-bottom: 5px;  "  class="btn btn-warning" value="PDF"></a>
 </div>
 <div class="col-sm-3 col-md-11 mx-auto"><button type="submit" id="edit" title="First check a button on any date to edit" class="btn-sm btn-success btn-block" style="float: center; width: 25%; margin-right: 90px;">EDIT</button></div>
 <br>

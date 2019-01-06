@@ -86,4 +86,19 @@ class Selector extends CI_Controller {
 		}
 		echo json_encode($array);
 	}
+
+	public function date_select() {
+		$userid = $this->session->userdata('userid');
+		$coordinator = $this->classes_model->classCoordinator($userid); 
+		$data = array('class_id' => $coordinator[0]->id,
+					'course' => $coordinator[0]->course,
+					'branch' => $coordinator[0]->branch,
+					'year' => $coordinator[0]->year,
+					'section' => $coordinator[0]->section);
+
+		$dataHead = array( 'domain_name' => 'Attendance System',);
+		$this->load->view('header',$dataHead);
+		$this->load->view('date_select',$data);
+		$this->load->view('footer');
+	}
 }

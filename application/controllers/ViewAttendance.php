@@ -139,4 +139,52 @@ class ViewAttendance extends CI_Controller {
 		} 
 	}
 
+	public function generate_report() {
+		$schedule = $this->View_attendance_model->getSchedule($this->input->post('schedule_id'));
+		$class = $this->View_attendance_model->getClass($schedule[0]->class_id);
+		$name = $this->View_attendance_model->getFaculty($schedule[0]->class_id,$schedule[0]->subject_id);
+		$subject = $this->View_attendance_model->getSubject($schedule[0]->subject_id);
+
+		$sch = (array)$schedule[0];
+		asort($sch);
+		$i=1;
+		$cols = '';
+		foreach($sch as $key=>$value) {
+			if($value == null || $key == 'id' || $key == 'class_id' || $key == 'subject_id' || $key == 'batch' || $key == 'last_lecture_no' || $key == 'last_lecture_date') 
+				continue;
+			$sh['l'.$i] = $value;
+			$cols .= $key." as 'l".$i."',";
+			$i++;
+		}
+		$attendance = $this->View_attendance_model->getAttendance($schedule[0]->id,$schedule[0]->class_id,$cols);
+
+		$data = array('schedule' => $sch,
+					'class' => (array)$class[0],
+					'name' => (array)$name[0],
+					'subject' => (array)$subject[0],
+					'attendance' => $attendance,
+					'sh' => $sh);
+		$this->load->helper('generate_pdf');
+		$pdf = new PDF;
+		$output = $pdf->getPdf($data);
+
+		$cls = $data['class'];
+		$course=$cls['course'];
+		$branch=$cls['branch'];
+		$yr=$cls['year'];
+		$section=$cls['section'];
+		$nm = $course.$branch.$yr.'-Year'.$section.'.pdf';
+		$loc = '/var/www/html/attendance.mvc/reports/'.$nm;
+		$file = fopen($loc, 'w');
+		fwrite($file, $output);
+		fclose($file);
+
+		echo $nm;
+	}
+
+	public function delete_report() {
+		$name = '/var/www/html/attendance.mvc/reports/'.$this->input->post('name');
+		unlink($name);
+	}
+
 }

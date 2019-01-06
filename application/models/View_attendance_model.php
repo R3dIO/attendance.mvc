@@ -43,6 +43,45 @@ public function studentList($data,$col) {
 	else 
 		{ return false; }
 }
+
+public function getSchedule($id) {
+	$this->db->select('*');
+	$this->db->from('schedule_table');
+	$this->db->where('id =',$id);
+	$query = $this->db->get();
+	return $query->result();
+}
+
+public function getClass($id) {
+	$this->db->select('*');
+	$this->db->from('class_table');
+	$this->db->where('id =',$id);
+	$query = $this->db->get();
+	return $query->result();
+}
+
+public function getFaculty($class_id,$sub_id) {
+	$this->db->select('name');
+	$this->db->from('faculty_table');
+	$this->db->join('faculty_subject_table','faculty_table.id=faculty_subject_table.faculty_id','inner');
+	$this->db->where('class_id =',$class_id);
+	$this->db->where('subject_id =',$sub_id);
+	$query = $this->db->get();
+	return $query->result();
+}
+
+public function getSubject($id) {
+	$this->db->select('*');
+	$this->db->from('subject_table');
+	$this->db->where('id =',$id);
+	$query = $this->db->get();
+	return $query->result();
+}
+
+public function getAttendance($schedule_id,$class_id,$cols) {
+	$query = $this->db->query("select roll_no,name,".$cols."present_no,0 from student_table s,attendance_table a where a.schedule_id=$schedule_id and class_id=$class_id and s.id=a.student_id order by s.roll_no");
+	return $query->result();
+}
 }
 
 ?>

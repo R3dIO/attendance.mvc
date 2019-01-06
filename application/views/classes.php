@@ -146,7 +146,7 @@
 <br><br>
 
 <?php if($coordinator) { ?>
-	<a href='date_select.php' ><p style="text-align:center">Click here for all subject attendance report</p></a>
+	<a href='#' ><p style="text-align:center">Click here for all subject attendance report</p></a>
 <?php } ?>
 
 </center>
