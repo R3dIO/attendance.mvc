@@ -175,3 +175,38 @@ function generate_pdf(baseurl,schedule) {
           }
       })
 }
+
+function generate_full_report(baseurl) {
+  var class_id = $('#class_id').val();
+  var from = $('#datePicker1').val();
+  var to = $('#datePicker2').val();
+
+  if(from == to)
+    alert('Please select two different dates!!');
+  else if(from > to)
+    alert('From date must be older than To date!!');
+  else {
+    $.ajax({
+          url : baseurl + "index.php/Selector/full_report_pdf",
+          type : "POST",
+          data : {class_id:class_id,from:from,to:to},
+          success : function(data) {
+            var element = document.createElement('a');
+            element.setAttribute('href',baseurl+'reports/'+data);
+            element.setAttribute('download',data);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            setTimeout(function() {
+              $.post(baseurl+"index.php/ViewAttendance/delete_report",{
+                        name:data
+                      }, function(data){});
+            },5000);
+          },
+          error : function(xhr,status,error) {
+            console.log(error);
+          }
+      })
+  }
+}

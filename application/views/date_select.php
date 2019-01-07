@@ -17,9 +17,8 @@
 <div class="container">
 
 <?php if(true) {?>
-<form name="selectclass" action="admin/full_report.php" method="post"><center>
-
-<input type="hidden" name="id" value="<?php echo $class_id; ?>">
+<center>
+<input type="hidden" id="class_id" value="<?php echo $class_id; ?>">
 <div class="form-group">
         <label for="example-date-input" class="col-form-label">From</label>
         <div class="col-4">
@@ -33,9 +32,8 @@
         </div>
  </div>
 
-<br><br><button type="submit" class="btn btn-success">Submit</button>
+<br><br><button onclick="generate_full_report('<?php echo base_url(); ?>')" class="btn btn-success">Submit</button>
 
-</form>
 <?php }?>
 <br><br><br>
 </div>

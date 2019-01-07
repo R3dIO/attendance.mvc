@@ -101,4 +101,33 @@ class Selector extends CI_Controller {
 		$this->load->view('date_select',$data);
 		$this->load->view('footer');
 	}
+
+	public function full_report_pdf() {
+		$class_id = $this->input->post('class_id');
+		$class = $this->view_attendance_model->getClass($class_id);print_r($class);
+		/*$schedule = $this->classes_model->getSchedule($class_id,0);
+		$name = $this->session->userdata('user');
+
+		$data = array('class' => (array)$class[0],
+					'schedule' => $schedule,
+					'from' => $this->input->post('from'),
+					'to' => $this->input->post('to'),
+					'name' => $name);
+		$this->load->helper('full_report');
+		$pdf = new PDF;
+		$output = $pdf->getPdf($data);
+
+		$cls = $data['class'];
+		$course=$cls['course'];
+		$branch=$cls['branch'];
+		$yr=$cls['year'];
+		$section=$cls['section'];
+		$nm = $course.$branch.$yr.'-Year'.$section.'All.pdf';
+		$loc = '/var/www/html/attendance.mvc/reports/'.$nm;
+		$file = fopen($loc, 'w');
+		fwrite($file, $output);
+		fclose($file);
+
+		echo $nm;*/
+	}
 }
