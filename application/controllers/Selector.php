@@ -104,30 +104,104 @@ class Selector extends CI_Controller {
 
 	public function full_report_pdf() {
 		$class_id = $this->input->post('class_id');
-		$class = $this->view_attendance_model->getClass($class_id);print_r($class);
-		/*$schedule = $this->classes_model->getSchedule($class_id,0);
+		$from = $this->input->post('from');
+		$to = $this->input->post('to');
+		$class = $this->View_attendance_model->getClass($class_id);
+		$schedule = $this->classes_model->getSchedule($class_id,0);
 		$name = $this->session->userdata('user');
 
-		$data = array('class' => (array)$class[0],
-					'schedule' => $schedule,
-					'from' => $this->input->post('from'),
-					'to' => $this->input->post('to'),
-					'name' => $name);
-		$this->load->helper('full_report');
-		$pdf = new PDF;
-		$output = $pdf->getPdf($data);
-
-		$cls = $data['class'];
+		$cls = (array)$class[0];
 		$course=$cls['course'];
 		$branch=$cls['branch'];
 		$yr=$cls['year'];
 		$section=$cls['section'];
+		$col='';
+		$n=0;
+		foreach ($schedule as $key => $value) {
+			$sub_id=$value->subject_id;
+			$sch_id=$value->id;
+			$subject = $this->View_attendance_model->getSubject($sub_id);
+			$col.="$n,";
+			$lec=[];
+			$l=1;
+			while($l<=$value->last_lecture_no) {
+				$month=substr($value->last_lecture_date,5,2);
+				$year=substr($value->last_lecture_date,0,4);
+				$str = 'l'.$l;
+				if($value->$str>=$from && $value->$str<=$to)
+					$lec[]=$l;
+				$l++;
+			}
+			$lec_no=sizeof($lec);
+			$cols[]=$subject[0]->subject_code.'('.$lec_no.')';
+			$attendance = $this->classes_model->getAttendance($value->id,$class_id);
+			foreach ($attendance as $ky => $val) {
+				$pr=0;
+				for($k=0;$k<sizeof($lec);$k++) {
+					$tmp = 'l'.$lec[$k];
+					if($val->$tmp==1)
+						$pr++;
+				}
+			$p[]=$pr;
+			}
+			$present[]=$p;
+			$p=null;
+			$n++;
+		}
+
+		$col=substr($col,0,strlen($col)-1);
+		$sem='';
+		if($month<='06') {
+			$sem='e';
+		}
+		else {
+			$sem='o';
+		}
+		switch($yr) {
+			case 1:
+			if($sem == 'o')
+				$s=1;
+			else $s=2;
+			break;
+			case 2:
+			if($sem == 'o')
+				$s=3;
+			else $s=4;
+			break;
+			case 3:
+			if($sem == 'o')
+				$s=5;
+			else $s=6;
+			break;
+			case 4:
+			if($sem == 'o')
+				$s=7;
+			else $s=8;
+			break;
+		}
+		
+		$student = $this->Classes_model->getStudents($col,$class_id);
+		$sub_class = $this->Classes_model->getclassSubject($course,$branch,$s);
+
+		$data = array('class' => (array)$class[0],
+					'schedule' => $schedule,
+					'name' => $name,
+					'student' => $student,
+					'sub_class' => $sub_class,
+					'month' => $month,
+					'year' => $year,
+					'cols' => $cols,
+					'present' => $present);
+		$this->load->helper('full_report');
+		$pdf = new PDF;
+		$output = $pdf->getPdf($data);
+
 		$nm = $course.$branch.$yr.'-Year'.$section.'All.pdf';
 		$loc = '/var/www/html/attendance.mvc/reports/'.$nm;
 		$file = fopen($loc, 'w');
 		fwrite($file, $output);
 		fclose($file);
 
-		echo $nm;*/
+		echo $nm;
 	}
 }
