@@ -27,7 +27,7 @@
 <script src="<?php echo base_url(); ?>js/buttons.print.min.js"></script>
 <script src="<?php echo base_url(); ?>js/dataTables.fixedColumns.min.js"></script>
 <script type="text/javascript">
-  function init_table(div) {
+  function init_table(div,title) {
     var index = [];
     for(i=2;i<=(parseInt(div)+1);i++) 
       index.push(i);
@@ -48,7 +48,7 @@
                       ordering : true,
                       dom: 'Bfrtip',
                       buttons: [
-                          'copy', 'excel', 
+                          'copy', {extend: 'excelHtml5', title: title}
                       ],
                   } );
       } else {
@@ -62,7 +62,7 @@
                       ordering : true,
                       dom: 'Bfrtip',
                       buttons: [
-                          'copy', 'excel', 
+                          'copy', {extend: 'excelHtml5', title: title}
                       ],
                   } );
       }
@@ -120,7 +120,7 @@
 <script>
 $(document).ready(function() {
     var table;
-    init_table(<?php echo $divider; ?>);
+    init_table(<?php echo $divider; ?>,'<?php echo $excel_title; ?>');
 } );
 </script>
 <script type="text/javascript">
@@ -173,6 +173,7 @@ $(document).ready(function() {
 
 
 <?php if(!$list=="") { ?>
+  <p id="excel_title" hidden><?php echo $excel_title; ?></p>
     <br>
   <div id="tabpage">
   <?php echo $table; ?>

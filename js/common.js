@@ -93,7 +93,7 @@ function login_faculty(baseurl) {
           } else {
             $('#login-submit').html('Log In');
             $('#login-submit').prop('disabled',false);
-            $('#error_msg').html('Incorrect username or password!!');
+            $('#error_msg').html('Incorrect username and/or password!!');
           }
         }
     })
@@ -118,8 +118,24 @@ function save_attendance(baseurl) {
           data : {date:date,attendanceRecords:checked},
           success : function(data) {
             if (data == 'saved') {
-              alert("Records Saved Successfully!!");
-              window.location.replace(baseurl+"index.php/class_selector");
+              var more = confirm("Records Saved Successfully!! Want to take more attendance?");
+              if (more) {
+                $('#check').html('Check All');
+                $('#checkBox').prop('checked',false);
+
+                var x=document.getElementsByName('chk');
+                var checkboxes = document.getElementsByName('attendanceRecords[]');
+                for (i = 0; i < x.length;i++)
+                  x[i].setAttribute("class", 'far fa-square');
+            
+               for(var i=0;i<checkboxes.length;i++)
+                  check1[i].className = 'btn btn-danger active btnchk';
+
+                $('html, body').animate({
+                        scrollTop: $('#datePicker').offset().top
+                                                 }, 'fast');
+              }
+              else window.location.replace(baseurl+"index.php/class_selector");
             } else alert("Records Not Saved. Please Try Again!!");
           }
       })
@@ -144,7 +160,8 @@ function relative_view(baseurl) {
           data : {limit:limit,relative:1,classdetail:classdetail,subjectdetail:subjectdetail,batch:batch,dateEdit:dateEdit},
           success : function(data) {
             $('#tabpage').html(data.table);
-            init_table(data.div);
+            var title = $('#excel_title').html();
+            init_table(data.div,title);
             table.reload();
           }
       })
@@ -202,7 +219,7 @@ function generate_full_report(baseurl) {
               $.post(baseurl+"index.php/ViewAttendance/delete_report",{
                         name:data
                       }, function(data){});
-            },5000);
+            },10000);
           },
           error : function(xhr,status,error) {
             console.log(error);

@@ -29,7 +29,8 @@ class ViewAttendance extends CI_Controller {
 		$this->session->set_userdata('scheduleId',$scheduleId);
 		$dates = $this->View_attendance_model->scheduleTable($data);// print_r($dates[0]);
 
-			$lecture_no = $dates[0]->last_lecture_no;
+		$lecture_no = $dates[0]->last_lecture_no;
+		if($lecture_no > 0) {
 			for($i=1;$i<=$lecture_no;$i++){    
 					$l='l'.$i; 
           		    $sdate[$l]=$dates[0]->$l;
@@ -59,84 +60,99 @@ class ViewAttendance extends CI_Controller {
 				}
 				//print_r($total_present);
 
-		$col = ""; 	$str_count = 0;	$datestring = "";
+			$col = ""; 	$str_count = 0;	$datestring = "";
 
-		foreach ($sdate as $key => $value) {
-			 if ($str_count >= $start && $str_count<=$lecture_no){
-			 	$col.="attendance_table.".$key.",";
-			 	$dl=substr($value,8,2)."-".substr($value,5,2);
-			 	//print_r($total_present);	print_r($key);var_dump();
-          		$datestring.='<td>'.$dl.'<br><b>('.$total_present[$str_count].')
-          		</b><div class="radio"><input type="radio" id="date" name="dateEdit" value='.$key.'></div></td>';
-			 }
-			 $str_count++; 
-		}
-		$str_count++; 
-
- 		$col = substr($col,0,strlen($col)-1);
- 		$studentList = $this->View_attendance_model->studentList($data,$col);// print_r($studentList);
-		$list="";
-		foreach ($studentList as  $student) {
 			foreach ($sdate as $key => $value) {
-				if(isset($student->$key) && $student->$key == 1	)
-                	{ $student->$key = 'P'; }
-            	elseif(isset($student->$key) && $student->$key == 0 )
-                	{ $student->$key ='A' ; }
+				 if ($str_count >= $start && $str_count<=$lecture_no){
+				 	$col.="attendance_table.".$key.",";
+				 	$dl=substr($value,8,2)."-".substr($value,5,2);
+				 	//print_r($total_present);	print_r($key);var_dump();
+	          		$datestring.='<td>'.$dl.'<br><b>('.$total_present[$str_count].')
+	          		</b><div class="radio"><input type="radio" id="date" name="dateEdit" value='.$key.'></div></td>';
+				 }
+				 $str_count++; 
 			}
+			$str_count++; 
 
-			/*if( $student->present_no == null )
-                $m=0;
-			
-			else $m=$lecture_no;*/
+	 		$col = substr($col,0,strlen($col)-1);
+	 		$studentList = $this->View_attendance_model->studentList($data,$col);// print_r($studentList);
+			$list="";
+			foreach ($studentList as  $student) {
+				foreach ($sdate as $key => $value) {
+					if(isset($student->$key) && $student->$key == 1	)
+	                	{ $student->$key = 'P'; }
+	            	elseif(isset($student->$key) && $student->$key == 0 )
+	                	{ $student->$key ='A' ; }
+				}
 
-			if(isset($_POST['relative']) && isset($_POST['dateEdit']) && $_POST['relative']==1)
-			{	$divider=$lecture_no-$start+1;	}
-            else
-            {  	$divider=$lecture_no;	}
+				/*if( $student->present_no == null )
+	                $m=0;
+				
+				else $m=$lecture_no;*/
 
-        	$num="";$count=0;$str_count=0;
+				if(isset($_POST['relative']) && isset($_POST['dateEdit']) && $_POST['relative']==1)
+				{	$divider=$lecture_no-$start+1;	}
+	            else
+	            {  	$divider=$lecture_no;	}
 
-        	foreach($sdate as $key => $value) {                             
-			     if ($str_count >= $start && $str_count<=$lecture_no){
-			 		$num.='<td id="status">'.$student->$key.'</td>';
-			        if($student->$key=="P")
-			            $count++;
-			        }
-			      $str_count++;  
-			    } $str_count++;
-			
-			$student->present_no = $count;
-          	$list.='<tr>
-          	<td>'.$student->roll_no.'</td>
-          	<td>'.$student->name.'</td>'.$num
-          	.' <td>'.$student->present_no.'</td>
-            <td>'.(int)($student->present_no*100/$divider).'%</td>
-        	</tr>';
+	        	$num="";$count=0;$str_count=0;
 
+	        	foreach($sdate as $key => $value) {                             
+				     if ($str_count >= $start && $str_count<=$lecture_no){
+				 		$num.='<td id="status">'.$student->$key.'</td>';
+				        if($student->$key=="P")
+				            $count++;
+				        }
+				      $str_count++;  
+				    } $str_count++;
+				
+				$student->present_no = $count;
+	          	$list.='<tr>
+	          	<td>'.$student->roll_no.'</td>
+	          	<td>'.$student->name.'</td>'.$num
+	          	.' <td>'.$student->present_no.'</td>
+	            <td>'.(int)($student->present_no*100/$divider).'%</td>
+	        	</tr>';
+
+				}
+
+			$class = $this->View_attendance_model->getClass($data['ClassId']);
+			$cls = (array)$class[0];
+			$course=$cls['course'];
+			$branch=$cls['branch'];
+			$yr=$cls['year'];
+			$section=$cls['section'];
+			$nm = $course.'-'.$branch.'-'.$yr.'-Year-'.$section;
+	        $data=array('session' => $session,
+		        		'date' => $datestring,
+	        			'list' => $list,
+		        		'schedule' => $scheduleId,
+		       			'divider' => $divider,
+		       			'batch' => $data['Batch'],
+		   				'class'	=> $data['ClassId'],
+	     				'subject' => $data['SubjectId'],
+	     				'excel_title' => $nm
+		       	 );
+		    $table =  $this->load->view('view_table',$data,true);
+	        if(isset($_POST['relative']) && $_POST['relative']==1) {
+	        	$arr = array('div' => $divider,
+	        				'table' => $table);
+	        	echo json_encode($arr); 
+	        }
+	        else{
+	        	$page = array('table' => $table);
+		        $headdata = array('domain_name' => "Attendance System");
+				$this->load->view('header',$headdata);
+				$this->load->view('viewAttendancePanel',$page);
+				$this->load->view('footer');
 			}
-
-        $data=array('session' => $session,
-	        		'date' => $datestring,
-        			'list' => $list,
-	        		'schedule' => $scheduleId,
-	       			'divider' => $divider,
-	       			'batch' => $data['Batch'],
-	   				'class'	=> $data['ClassId'],
-     				'subject' => $data['SubjectId']
-	       	 );
-	    $table =  $this->load->view('view_table',$data,true);
-        if(isset($_POST['relative']) && $_POST['relative']==1) {
-        	$arr = array('div' => $divider,
-        				'table' => $table);
-        	echo json_encode($arr); 
-        }
-        else{
-        	$page = array('table' => $table);
+		} else {
+			$page = array('list' => '');
 	        $headdata = array('domain_name' => "Attendance System");
 			$this->load->view('header',$headdata);
 			$this->load->view('viewAttendancePanel',$page);
 			$this->load->view('footer');
-		} 
+		}
 	}
 
 	public function generate_report() {

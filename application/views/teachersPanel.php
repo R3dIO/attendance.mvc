@@ -43,12 +43,12 @@
   </div>
 
   <div class="col-md-2 col-xs-12 col-sm-12">   
-    <a class="icon-wrapper" href="Search"><i class="fa fa-pencil-square-o fa-4x  custom-icon"><span class="fix-editor">&nbsp;</span></i></a><br>
-    <a href="searchf.php"><h3>Search</h3></a>
+    <a class="icon-wrapper" href="index.php/Search"><i class="fa fa-pencil-square-o fa-4x  custom-icon"><span class="fix-editor">&nbsp;</span></i></a><br>
+    <a href="index.php/Search"><h3>Search</h3></a>
   </div>
 
   <div class="col-md-2 col-xs-12 col-sm-12">   
-    <form method="post" action="http://10.82.190.3:8080/verifyfaculty" id="marks_form">
+    <form method="post" action="http://117.239.195.146:8080/verifyfaculty" id="marks_form">
       <input type="hidden" name="flag" value="faculty">
       <input type="hidden" name="t1" value="<?php echo $username; ?>">
       <input type="hidden" name="t2" value="<?php echo $password; ?>">

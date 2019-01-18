@@ -49,27 +49,29 @@ class AttendancePanel extends CI_Controller {
 		//print_r($studentList);
 		$list_in="";	$i=0; 	$list_out="";
 
-		foreach ($studentList as $key => $value) {
-			$list_in.='<td data-title="'.$value->name.'"><span class="button-checkbox">
-        	<button type="button" class="btn btnchk" data-color="success" title="'.$value->name.'">'.$value->roll_no.'</button>
-        	<input type="checkbox" class="hidden-sm-up hidden-sm-right" name="attendanceRecords[]" id="present" value="'.$value->id.'" />
-    		</span></td>';
-    		$i++;
+		if($studentList) {
+			foreach ($studentList as $key => $value) {
+				$list_in.='<td data-title="'.$value->name.'"><span class="button-checkbox">
+	        	<button type="button" class="btn btnchk" data-color="success" title="'.$value->name.'">'.$value->roll_no.'</button>
+	        	<input type="checkbox" class="hidden-sm-up hidden-sm-right" name="attendanceRecords[]" id="present" value="'.$value->id.'" />
+	    		</span></td>';
+	    		$i++;
 
-    		if($i==6){ 
-                $list_in='<tr>'.$list_in.'</tr>';
-                $list_out.=$list_in;
-                $list_in="";
-                $i=0;
-            }        
+	    		if($i==6){ 
+	                $list_in='<tr>'.$list_in.'</tr>';
+	                $list_out.=$list_in;
+	                $list_in="";
+	                $i=0;
+	            }        
+			}
 		}
 
 		if($i>0) {
           	$list_in='<tr>'.$list_in.'</tr>';
            	$list_out.=$list_in;
-        }
+        } else $list_out = '<br><br><h4>Batch not assigned!! Contact Admin.</h4><br><br>';
 
-		$data= array('student_list' => $list_out, );
+		$data= array('student_list' => $list_out, 'count' => $i);
 		$dataHead = array( 'domain_name' => 'Attendance System',);
 		$this->load->view('header',$dataHead);
 		$this->load->view('attendancePanel',$data);

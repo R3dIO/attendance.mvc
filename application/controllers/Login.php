@@ -47,15 +47,20 @@ class Login extends CI_Controller {
 		'username' => $this->input->post('username'),
 		'password' => $this->input->post('password')
 		);
-		$result = $this->login_model->login($data); //print_r($result);
+		$this->load->helper('ldap_verify');
+		$id = ldap_verify($data);
+		$result = $this->login_model->login(999); //print_r($result);
 		
 		if( is_array($result) ){
 			$data = array('id' => $result[0]->id);
 			$this->session->set_userdata('username', $result[0]->username);
+			$this->session->set_userdata('password', trim($result[0]->pass));
 			$this->session->set_userdata('userid', $result[0]->id);
 			
 			$result=$this->login_model->sessionData($data);
 			$this->session->set_userdata('user', $result[0]->name);
+			//$this->login_model->setToken($id,$this->input->post('password'));
+
 			echo 'success';
 		}
 		else{

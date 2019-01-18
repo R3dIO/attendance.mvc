@@ -8,7 +8,7 @@
 <center>
     <div class="col-md-10">
     <br>
-    <div class="form-group form-inline">
+    <div class="form-group form-inline" <?php if($count==0) echo 'hidden'; ?>>
         <label for="example-date-input" class="col-form-label"><b>Date</b></label>
         <div class="col-md-3 col-sm-8">
             <input class="form-control" type="date"  value="<?php date_default_timezone_set('Asia/Kolkata'); echo  date("Y-m-d");?>" id="datePicker" required>
@@ -16,8 +16,8 @@
     </div>
 <div class="card-block">
 <blockquote class="card-blockquote">
-    <div class="col-md-4 checkbox">
-    <input type="checkbox" onClick="toggle(this)" /> <div id="check">Check All</div><br/>
+    <div class="col-md-4 checkbox" <?php if($count==0) echo 'hidden'; ?>>
+    <input type="checkbox" onClick="toggle(this)" id="checkBox" /> <div id="check">Check All</div><br/>
     </div>
     <div class="container border border-success">  
     <div id="no-more-tables">
@@ -28,7 +28,7 @@
         </div><br><br>
     </div>
 </blockquote>
-    <button onclick="save_attendance('<?php echo base_url(); ?>')" class="btn btn-primary btn-lg">Submit</button>
+    <button onclick="save_attendance('<?php echo base_url(); ?>')" class="btn btn-primary btn-lg" <?php if($count==0) echo 'hidden'; ?>>Submit</button>
 </div>
 </center>
 </div>

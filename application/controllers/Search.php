@@ -46,6 +46,10 @@ class Search extends CI_Controller {
 		echo "<table>";
 		if($studentDetails)
 		foreach ($studentDetails[0] as $key => $value) {
+			if($key == 'id')
+				continue;
+			if($key == 'Batch' && $value == 0)
+				$value = "NA";
 			echo '<tr><td>'. $key.' : </td><td> '.$value.'</td></tr>';
 		}
 		if($personalDetails)
