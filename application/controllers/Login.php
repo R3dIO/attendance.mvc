@@ -49,7 +49,7 @@ class Login extends CI_Controller {
 		);
 		$this->load->helper('ldap_verify');
 		$id = ldap_verify($data);
-		$result = $this->login_model->login(999); //print_r($result);
+		$result = $this->login_model->login($id); //print_r($result);
 		
 		if( is_array($result) ){
 			$data = array('id' => $result[0]->id);
@@ -59,7 +59,7 @@ class Login extends CI_Controller {
 			
 			$result=$this->login_model->sessionData($data);
 			$this->session->set_userdata('user', $result[0]->name);
-			//$this->login_model->setToken($id,$this->input->post('password'));
+			$this->login_model->setToken($id,$this->input->post('password'));
 
 			echo 'success';
 		}

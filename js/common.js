@@ -185,7 +185,7 @@ function generate_pdf(baseurl,schedule) {
               $.post(baseurl+"index.php/ViewAttendance/delete_report",{
                         name:data
                       }, function(data){});
-            },5000);
+            },10000);
           },
           error : function(xhr,status,error) {
             console.log(error);

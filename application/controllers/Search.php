@@ -9,9 +9,12 @@ class Search extends CI_Controller {
 	}
 	public function index()
 	{	
-		$dataHead = array( 'domain_name' => 'Attendance System');
-		$this->load->view('header',$dataHead);
-		$this->load->view('searchPanel');
+		if($this->session->userdata('userid')) {
+			$dataHead = array( 'domain_name' => 'Attendance System');
+			$this->load->view('header',$dataHead);
+			$this->load->view('searchPanel');
+		} else
+			$this->load->view('index');
 		$this->load->view('footer');
 	}
 
